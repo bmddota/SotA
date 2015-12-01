@@ -1,0 +1,76 @@
+// THIS FILE IS AUTO-GENERATED
+
+Layer0
+{
+	shader "water_dota.vfx"
+
+	F_FLOW_COLOR 1
+	F_FLOW_NORMALS 1
+
+	//---- 2-Sided Rendering ----
+	F_RENDER_BACKFACES 1
+
+	//---- Color ----
+	g_vTexCoordScale "[0.500 1.048]"
+	TextureColor "[1.000000 1.000000 1.000000 0.000000]"
+
+	//---- Flow ----
+	g_flFlowTimeScale "0.001"
+
+	//---- Flow Color ----
+	g_flColorFlowLerpExp "10.000"
+	g_flColorFlowTimeIntervalInSeconds "3.000"
+	g_flColorFlowUvScale "10.000"
+	g_flColorFlowUvScrollDistance "0.000"
+
+	//---- Flow Noise ----
+	g_flNoiseStrength "0.000"
+	g_flNoiseUvScale "0.0000"
+	TextureNoise "materials/dev/water_normal.tga"
+
+	//---- Flow Normals ----
+	g_flNormalFlowLerpExp "0.220"
+	g_flNormalFlowTimeIntervalInSeconds "3.000"
+	g_flNormalFlowUvScrollDistance "0.000"
+	g_flNormalUvScale "1000.000"
+	g_flWorldPositionScale "8.819"
+	g_flWorldUvScale "0.000"
+	TextureFlow "materials/dev/water_normal.tga"
+
+	//---- Low End ----
+	g_flLowEndBaseBloom "0.010"
+	g_flLowEndBloomPower "0.000"
+	g_flLowEndReflectionPower "10.000"
+	g_flLowEndSurfaceFactor "0.000"
+	g_flLowEndSurfaceMinimumColor "0.000"
+	g_flLowEndSurfaceOpacity "1.000"
+	g_vLowEndReflectionColor "[1.000000 1.000000 1.000000 0.000000]"
+	g_vLowEndReflectionDir "[0.000 0.000 1.000]"
+	g_vLowEndSurfaceColor "[1.000000 1.000000 1.000000 0.000000]"
+
+	//---- Normal Map ----
+	g_flBumpStrength "0.000"
+	TextureNormal "materials/dev/water_normal.tga"
+
+	//---- Reflections ----
+	g_flReflectance "0.000"
+	g_flReflectionAmount "0.000"
+	g_vReflectionTint "[0.000000 0.000000 0.000000 0.000000]"
+
+	//---- Refractions ----
+	g_flRefractionAmount "1.000"
+	g_vRefractionTint "[1.000000 1.000000 1.000000 0.000000]"
+	g_vWaterFogColor "[0.000000 0.000000 0.000000 0.000000]"
+
+	//---- Specular ----
+	g_flBaseBloom "1.000"
+	g_flBloomPower "10.000"
+	g_flReflectionPower "0.010"
+	g_vReflectionColor "[0.000000 0.000000 0.000000 0.000000]"
+	g_vReflectionDir "[1.000 1.000 1.000]"
+
+	SystemAttributes
+	{
+		PhysicsSurfaceProperties "alienflesh"
+	}
+}
