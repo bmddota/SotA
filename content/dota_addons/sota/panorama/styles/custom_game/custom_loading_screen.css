@@ -1,0 +1,93 @@
+@define TotalLength: 40s;
+@define TimingFunc: linear;
+@define IterationCount: 1;
+@define AnimationDelay: 0s;
+
+.AddonLoadingRoot
+{
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    overflow: clip;
+}
+
+#HelpPanel Label
+{
+  color: #cccccc;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+#HelpPanel
+{
+  background-color: #111111;
+  margin-top:50px;
+  margin-left:50px;
+  width: 500px;
+  height: 880px;
+  border: 2px solid #222222;
+  flow-children: down;
+  padding: 5px;
+}
+
+#TitlePanel
+{
+  horizontal-align: left;
+  vertical-align: bottom;
+  margin-bottom: 80px;
+  margin-left: 100px;
+  flow-children: right;
+}
+
+#AddonTitle
+{
+  margin-bottom: -15px;
+  vertical-align: center;
+  text-transform: uppercase;
+  font-size: 74px;
+  color: #cccccc;
+  text-shadow: 2px 2px 2px #000000;
+}
+
+.SeqImg
+{
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: 100% 100%;
+}
+
+#CustomBg
+{
+
+  margin-top: 250px;
+  margin-left: 400px;
+    overflow: clip;
+  pre-transform-scale2d: 1.0;
+  animation-name: gamemode_anim;
+  animation-delay: AnimationDelay;
+  animation-duration: TotalLength;
+  animation-timing-function: TimingFunc;
+  animation-iteration-count: IterationCount;
+}
+
+#gamemode
+{
+  margin-left: 160px;
+  /*margin-bottom: 0px;*/
+  
+}
+
+@keyframes 'gamemode_anim'
+{
+  0%
+  {
+    transform: translateX( 0px ) translateY( 0px );
+    pre-transform-scale2d: .4;
+  }
+
+  100%
+  {
+    transform: translateX( 50px ) translateY( -200px );
+    pre-transform-scale2d: 1.0;
+  }
+}

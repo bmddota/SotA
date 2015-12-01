@@ -1,0 +1,28 @@
+<root>
+  <styles>
+    <include src="file://{resources}/styles/custom_game/custom_loading_screen.css" />
+  </styles>
+  <Panel class="AddonLoadingRoot">
+    <Panel id="HelpPanel">
+      <Label html="true" style="text-decoration: underline; font-weight:bold; font-size:28px;" text="Controls"/>
+      <Label html="true" text="Use &lt;img src='file://{images}/custom_game/loading_screen/leftclick.png'&gt; to shoot!"/>
+      <Label html="true" style="margin-bottom:0px;" text="Use &lt;img src='file://{images}/custom_game/loading_screen/rightclick.png'&gt; to move your cursor back to the center of the screen!"/>
+      <Label html="true" text="You can only turn left or right so much before your cursor maxes out.  Right click to get more turnability!"/>
+      <Label html="true" text="Use &lt;img src='file://{images}/custom_game/loading_screen/wasd.png'&gt; to move!"/>
+      <Label html="true" text="Use &lt;img src='file://{images}/custom_game/loading_screen/1key.png'&gt;&lt;img src='file://{images}/custom_game/loading_screen/2key.png'&gt;&lt;img src='file://{images}/custom_game/loading_screen/3key.png'&gt; to switch weapons!"/>
+      <Label html="true" text="Use &lt;img src='file://{images}/custom_game/loading_screen/rkey.png'&gt; to reload your weapon!"/> 
+      <Label html="true" style="margin-bottom:0px;" text="Press &lt;img src='file://{images}/custom_game/loading_screen/space.png'&gt; to Jump!"/>
+      <Label html="true" text="All heroes can double jump, and some can triple jump!"/>
+      <Label html="true" style="margin-bottom:0px;" text="Press &lt;img src='file://{images}/custom_game/loading_screen/shift.png'&gt; to use your hero's Movement ability!"/>
+      <Label html="true" text="This drains your mana, be careful!"/>
+      <Label html="true" text="Wheel &lt;img src='file://{images}/custom_game/loading_screen/wheel.png'&gt; to adjust camera height!"/>
+      <Label html="true" style="text-decoration: underline; margin-top:10px;" text="When holding the flag, you regenerate mana more slowly, making it harder to use your movement ability!"/>
+    </Panel>
+    <Panel id="CustomBg" >
+      <Image id="gamemode" class="SeqImg" src="file://{images}/custom_game/loading_screen/gamemode.png" />
+    </Panel>
+    <Panel id="TitlePanel">
+      <Label id="AddonTitle" text="#addon_game_name" style="" /> 
+    </Panel>
+  </Panel>
+</root>

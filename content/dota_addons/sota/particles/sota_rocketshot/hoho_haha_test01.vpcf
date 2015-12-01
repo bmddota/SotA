@@ -1,0 +1,161 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	_class = "CParticleSystemDefinition"
+	m_flCullRadius = -1.000000
+	m_ConstantColor =
+	[
+		170,
+		89,
+		89,
+		255,
+	]
+	m_ConstantNormal =
+	[
+		0.000000,
+		-1.000000,
+		0.000000,
+	]
+	m_flConstantRadius = 55.000000
+	m_flConstantLifespan = 2.000000
+	m_nMaxParticles = 20
+	m_Children =
+	[
+		{
+			m_ChildRef = resource:"particles/sota_rocketshot/hoho_haha_test01d.vpcf"
+		},
+		{
+			m_ChildRef = resource:"particles/sota_rocketshot/hoho_haha_test01c.vpcf"
+		},
+		{
+			m_ChildRef = resource:"particles/sota_rocketshot/hoho_haha_test01b.vpcf"
+		},
+		{
+			m_ChildRef = resource:"particles/sota_rocketshot/hoho_haha_test01e.vpcf"
+		},
+	]
+	m_Operators =
+	[
+		{
+			_class = "C_OP_BasicMovement"
+		},
+		{
+			_class = "C_OP_Decay"
+			m_bDisableOperator = true
+		},
+		{
+			_class = "C_OP_SetChildControlPoints"
+			m_nFirstControlPoint = 3
+			m_bSetOrientation = true
+		},
+		{
+			_class = "C_OP_FadeIn"
+			m_flFadeInTimeMin = 0.100000
+			m_flFadeInTimeMax = 0.400000
+			m_bDisableOperator = true
+		},
+		{
+			_class = "C_OP_FadeOut"
+			m_flFadeOutTimeMin = 0.400000
+			m_flFadeOutTimeMax = 0.800000
+			m_bDisableOperator = true
+		},
+		{
+			_class = "C_OP_ColorInterpolate"
+			m_ColorFade =
+			[
+				255,
+				152,
+				197,
+				255,
+			]
+		},
+		{
+			_class = "C_OP_SpinYaw"
+			m_nSpinRateDegrees = 1000
+		},
+		{
+			_class = "C_OP_OscillateVector"
+			m_RateMax =
+			[
+				0.000000,
+				10.000000,
+				0.000000,
+			]
+			m_FrequencyMin =
+			[
+				0.000000,
+				1.000000,
+				0.000000,
+			]
+			m_FrequencyMax =
+			[
+				2.000000,
+				10.000000,
+				2.000000,
+			]
+			m_nField = 6
+		},
+		{
+			_class = "C_OP_FadeInSimple"
+			m_flFadeInTime = 0.500000
+		},
+		{
+			_class = "C_OP_InterpolateRadius"
+			m_flStartScale = 1.200000
+			m_bEaseInAndOut = true
+		},
+	]
+	m_Renderers =
+	[
+		{
+			_class = "C_OP_RenderSprites"
+			m_nOrientationType = 3
+			m_flDiffuseAmount = 0.834000
+			m_flSourceAlphaValueToMapToZero = 0.020000
+			m_bSaturateColorPreAlphaBlend = false
+			m_flAddSelfAmount = 1.000000
+			m_hTexture = resource:"materials/particle/spotlight/spotlight_single.vtex"
+		},
+		{
+			_class = "C_OP_RenderDeferredLight"
+			m_ColorScale =
+			[
+				255,
+				117,
+				107,
+			]
+			m_bDisableOperator = true
+		},
+	]
+	m_Initializers =
+	[
+		{
+			_class = "C_INIT_RandomLifeTime"
+			m_fLifetimeMin = 1.000000
+			m_fLifetimeMax = 2.000000
+		},
+		{
+			_class = "C_INIT_RandomRotation"
+			m_nFieldOutput = 12
+		},
+		{
+			_class = "C_INIT_RandomAlpha"
+			m_nAlphaMin = 110
+			m_nAlphaMax = 200
+		},
+		{
+			_class = "C_INIT_VelocityFromCP"
+			m_nControlPoint = 1
+		},
+		{
+			_class = "C_INIT_CreateWithinSphere"
+		},
+	]
+	m_Emitters =
+	[
+		{
+			_class = "C_OP_InstantaneousEmitter"
+			m_nParticlesToEmit = 1
+		},
+	]
+}

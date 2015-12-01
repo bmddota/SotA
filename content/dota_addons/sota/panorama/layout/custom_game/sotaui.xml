@@ -1,0 +1,31 @@
+<root>
+  <styles>
+    <include src="s2r://panorama/styles/dotastyles.vcss_c" />
+    <include src="file://{resources}/styles/custom_game/sotaui.css" />
+  </styles>
+  <scripts>
+    <include src="file://{resources}/scripts/custom_game/sotaui.js" /> 
+  </scripts>
+  <Panel hittest="false" class="SotaBase">
+    <Panel id="Score">
+      <Label id="RadiantScore" text="9999"/>
+      <Label id="DireScore" text="9999"/>
+    </Panel>
+    <Panel hittest="false" class="Bound" id="LeftBound">
+      <Label html="true" text="&lt;img src='file://{images}/custom_game/loading_screen/rightclick.png'&gt;"/>
+    </Panel>
+    <Panel hittest="false" class="Bound" id="RightBound">
+      <Label html="true" text="&lt;img src='file://{images}/custom_game/loading_screen/rightclick.png'&gt;"/>
+    </Panel>
+    <Panel hittest="false" class="Bound" id="TopBound">
+      <Label html="true" text="&lt;img src='file://{images}/custom_game/loading_screen/rightclick.png'&gt;"/>
+    </Panel>
+    <Panel hittest="false" class="Bound" id="BottomBound">
+      <Label html="true" text="&lt;img src='file://{images}/custom_game/loading_screen/rightclick.png'&gt;"/>
+    </Panel>
+
+    <Panel hittest="false" id="CrossHair">
+      
+    </Panel>
+  </Panel>
+</root>

@@ -1,0 +1,147 @@
+"Attachments"
+{
+	"Particles"
+	{
+		"models/items/wraith_king/winterblight_weapon/winterblight_weapon.vmdl"
+		{
+			"particles/econ/items/wraith_king/wraith_king_winterblight_weapon/wraith_king_winterblight_ambient.vpcf"
+			{
+				"2"		"attach_mouth"
+				"1"		"attach_eye_l"
+				"0"		"attach_eye_r"
+			}
+		}
+	}
+	"models/heroes/antimage/antimage.vmdl"
+	{
+		"attach_hitloc"
+		{
+			"models/props_gameplay/red_box.vmdl"
+			{
+				"scale"		"1.1000000238419"
+				"pitch"		"-70"
+				"roll"		"0"
+				"ZPos"		"0"
+				"YPos"		"-17"
+				"yaw"		"-135"
+				"XPos"		"-13"
+			}
+			"models/particle/snowball.vmdl"
+			{
+				"scale"		"0.30000001192093"
+				"pitch"		"-113"
+				"roll"		"131"
+				"ZPos"		"112"
+				"YPos"		"-27"
+				"yaw"		"45"
+				"XPos"		"-65"
+			}
+		}
+		"attach_h2"
+		{
+			"models/particle/snowball.vmdl"
+			{
+				"scale"		"0.30000001192093"
+				"pitch"		"105"
+				"roll"		"-90"
+				"ZPos"		"-19"
+				"YPos"		"-50"
+				"yaw"		"-90"
+				"XPos"		"-80"
+			}
+		}
+		"attach_h1"
+		{
+			"models/particle/snowball.vmdl"
+			{
+				"scale"		"0.30000001192093"
+				"pitch"		"-113"
+				"roll"		"0"
+				"ZPos"		"-19"
+				"YPos"		"97"
+				"yaw"		"0"
+				"XPos"		"60"
+			}
+		}
+	}
+	"models/heroes/axe/axe.vmdl"
+	{
+		"attach_weapon"
+		{
+			"models/items/faceless_void/battlefury/battlefury.vmdl"
+			{
+				"scale"		"2"
+				"pitch"		"-50"
+				"roll"		"28"
+				"ZPos"		"-63"
+				"YPos"		"111"
+				"yaw"		"0"
+				"XPos"		"0"
+			}
+			"models/items/wraith_king/winterblight_weapon/winterblight_weapon.vmdl"
+			{
+				"scale"		"2.2999999523163"
+				"YPos"		"0"
+				"pitch"		"-140"
+				"ZPos"		"0"
+				"roll"		"30"
+				"yaw"		"180"
+				"XPos"		"70"
+			}
+		}
+		"attach_hitloc"
+		{
+			"models/props_gameplay/red_box.vmdl"
+			{
+				"scale"		"1.2999999523163"
+				"pitch"		"-70"
+				"roll"		"0"
+				"yaw"		"-135"
+				"YPos"		"0"
+				"ZPos"		"0"
+				"XPos"		"-13"
+			}
+			"models/heroes/tiny_04/tiny04_deathsim.vmdl"
+			{
+				"scale"		"1"
+				"pitch"		"0"
+				"roll"		"0"
+				"ZPos"		"0"
+				"YPos"		"0"
+				"yaw"		"0"
+				"XPos"		"0"
+				"Animation" "tiny04_deathsim_anim"
+			}
+		}
+		"attach_origin"
+		{
+			"models/props_gameplay/red_box.vmdl"
+			{
+				"scale"		"2"
+				"pitch"		"0"
+				"roll"		"0"
+				"yaw"		"0"
+				"YPos"		"0"
+				"ZPos"		"0"
+				"XPos"		"0"
+			}
+		}
+	}
+	"models/heroes/dragon_knight/dragon_knight.vmdl"
+	{
+		"attach_attack1"
+		{
+			"models/items/faceless_void/battlefury/battlefury.vmdl"
+			{
+				"scale"		"1.7999999523163"
+				"pitch"		"180"
+				"roll"		"10"
+				"ZPos"		"-90"
+				"YPos"		"120"
+				"yaw"		"190"
+				"XPos"		"0"
+			}
+		}
+	}
+	"ExtraKeys"		"Can Be Added Wherever"
+}

@@ -1,0 +1,218 @@
+// No spaces in event names, reserve length 32
+// All strings are case sensitive
+//
+// valid data key types are:
+//   string : a zero terminated string
+//   bool   : unsigned int, 1 bit
+//   byte   : unsigned int, 8 bit
+//   short  : signed int, 16 bit
+//   long   : signed int, 32 bit
+//   float  : float, 32 bit
+//   uint64 : unsigned int 64 bit
+//   local  : any data, but not networked to clients
+//
+// following key names are reserved:
+//   local      : if set to 1, event is not networked to clients
+//   unreliable : networked, but unreliable
+//   suppress   : never fire this event
+//   time	: firing server time
+//   eventid	: holds the event ID
+
+"CustomEvents"
+{
+
+"ammo_update_pid"
+{
+	"pid"	"short"
+	"ammo"	"short"
+	"reserve"	"short"
+}
+
+"ammo_update"
+{
+	"p0"	"short"
+	"p0reserve"	"short"
+	"p1"	"short"
+	"p1reserve"	"short"
+	"p2"	"short"
+	"p2reserve"	"short"
+	"p3"	"short"
+	"p3reserve"	"short"
+	"p4"	"short"
+	"p4reserve"	"short"
+	"p5"	"short"
+	"p5reserve"	"short"
+	"p6"	"short"
+	"p6reserve"	"short"
+	"p7"	"short"
+	"p7reserve"	"short"
+	"p8"	"short"
+	"p8reserve"	"short"
+	"p9"	"short"
+	"p9reserve"	"short"
+}
+
+"ammo_update1"
+{
+	"p10"	"short"
+	"p10reserve"	"short"
+	"p11"	"short"
+	"p11reserve"	"short"
+	"p12"	"short"
+	"p12reserve"	"short"
+	"p13"	"short"
+	"p13reserve"	"short"
+	"p14"	"short"
+	"p14reserve"	"short"
+	"p15"	"short"
+	"p15reserve"	"short"
+	"p16"	"short"
+	"p16reserve"	"short"
+	"p17"	"short"
+	"p17reserve"	"short"
+	"p18"	"short"
+	"p18reserve"	"short"
+	"p19"	"short"
+	"p19reserve"	"short"
+}
+
+"ammo_update2"
+{
+	"p20"	"short"
+	"p20reserve"	"short"
+	"p21"	"short"
+	"p21reserve"	"short"
+	"p22"	"short"
+	"p22reserve"	"short"
+	"p23"	"short"
+	"p23reserve"	"short"
+	"p24"	"short"
+	"p24reserve"	"short"
+	"p25"	"short"
+	"p25reserve"	"short"
+	"p26"	"short"
+	"p26reserve"	"short"
+	"p27"	"short"
+	"p27reserve"	"short"
+	"p28"	"short"
+	"p28reserve"	"short"
+	"p29"	"short"
+	"p29reserve"	"short"
+}
+
+"ammo_update3"
+{
+	"p30"	"short"
+	"p30reserve"	"short"
+	"p31"	"short"
+	"p31reserve"	"short"
+	"p32"	"short"
+	"p32reserve"	"short"
+	"p33"	"short"
+	"p33reserve"	"short"
+	"p34"	"short"
+	"p34reserve"	"short"
+	"p35"	"short"
+	"p35reserve"	"short"
+	"p36"	"short"
+	"p36reserve"	"short"
+	"p37"	"short"
+	"p37reserve"	"short"
+	"p38"	"short"
+	"p38reserve"	"short"
+	"p39"	"short"
+	"p39reserve"	"short"
+}
+
+"weapon_change"
+{
+	"pid"           "short"
+	"weapon"	"string"
+	"time"		"float"
+}
+
+"weapon_reload"
+{
+	"pid"           "short"
+	"time"		"float"
+}
+
+"sota_charge"
+{
+	"pid"           "short"
+	"time"		"float"
+}
+
+"sota_set_hero_index"
+{
+	"pid"           "short"
+	"index"		"short"
+}
+
+    // Stat collection
+    "stat_collection_part"
+    {
+        "data"          "string"
+    }
+
+    "stat_collection_send"
+    {
+    }
+
+"control_override_config"
+    {
+        "pid"           "short"
+        "clicks"        "bool"
+        "keys"          "bool"
+        "movement"      "bool"
+        "selection"     "bool"
+    }
+
+    "control_override_keyfilter"
+    {
+        "pid"           "short"
+        "filter"        "string"
+    }
+
+    "control_override_selectfilter"
+    {
+        "pid"           "short"
+        "filter"        "string"
+    }
+
+    "control_override_mousefilter"
+    {
+        "pid"           "short"
+        "filter"        "string"
+    }
+
+    "control_override_cvar"
+    {
+        "pid"           "short"
+        "cvar"          "string"
+        "value"         "string"
+    }
+
+    "camera_manager_config"
+    {
+        "pid"           "short"
+        "activate"      "bool"
+        "xsensitivity"  "float"
+        "ysensitivity"  "float"
+	"distance"	"float"
+    }
+    "camera_manager_set_property"
+    {
+        "pid"           "short"
+        "property"      "short"
+        "value"  	"float"
+    }
+    "camera_manager_lerp_property"
+    {
+        "pid"           "short"
+        "property"      "short"
+        "to"  		"float"
+        "count" 	"long"
+	"step"		"float"
+    }
+}

@@ -1,0 +1,57 @@
+// THIS FILE IS AUTO-GENERATED
+
+Layer0
+{
+	shader "water_dota.vfx"
+
+	//---- Color ----
+	g_vTexCoordScale "[1.000 1.000]"
+
+	//---- Flow ----
+	g_flFlowTimeScale "1.000"
+
+	//---- Flow Normals ----
+	g_flNormalUvScale "1.000"
+	g_flWorldPositionScale "1.000"
+
+	//---- Low End ----
+	g_flLowEndBaseBloom "0.100"
+	g_flLowEndBloomPower "1.000"
+	g_flLowEndReflectionPower "1.000"
+	g_flLowEndSurfaceFactor "0.300"
+	g_flLowEndSurfaceMinimumColor "0.200"
+	g_flLowEndSurfaceOpacity "0.500"
+	g_vLowEndReflectionColor "[1.000000 1.000000 1.000000 0.000000]"
+	g_vLowEndReflectionDir "[0.000 0.000 1.000]"
+	g_vLowEndSurfaceColor "[0.501961 0.501961 0.501961 0.000000]"
+
+	//---- Normal Map ----
+	g_flBumpStrength "1.000"
+	g_flScroll1X "0.000"
+	g_flScroll1Y "0.000"
+	g_flScroll2X "0.000"
+	g_flScroll2Y "0.000"
+	TextureNormal "materials/example/sand_path_example_normal.tif"
+
+	//---- Reflections ----
+	g_flReflectance "0.200"
+	g_flReflectionAmount "1.000"
+	g_vReflectionTint "[1.000000 1.000000 1.000000 0.000000]"
+
+	//---- Refractions ----
+	g_flRefractionAmount "1.000"
+	g_vRefractionTint "[1.000000 1.000000 1.000000 0.000000]"
+	g_vWaterFogColor "[0.501961 0.501961 0.501961 0.000000]"
+
+	//---- Specular ----
+	g_flBaseBloom "0.100"
+	g_flBloomPower "1.000"
+	g_flReflectionPower "1.000"
+	g_vReflectionColor "[1.000000 1.000000 1.000000 0.000000]"
+	g_vReflectionDir "[0.000 0.000 1.000]"
+
+	SystemAttributes
+	{
+		PhysicsSurfaceProperties "water"
+	}
+}

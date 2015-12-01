@@ -1,0 +1,132 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	_class = "CParticleSystemDefinition"
+	m_nInitialParticles = 2
+	m_ConstantColor =
+	[
+		247,
+		63,
+		63,
+		255,
+	]
+	m_nMaxParticles = 40
+	m_Operators =
+	[
+		{
+			_class = "C_OP_BasicMovement"
+		},
+		{
+			_class = "C_OP_PositionLock"
+			m_nControlPointNumber = 3
+			m_flStartTime_min = -3.000000
+			m_flStartTime_max = -3.000000
+		},
+		{
+			_class = "C_OP_Decay"
+		},
+		{
+			_class = "C_OP_FadeOutSimple"
+			m_flFadeOutTime = 0.150000
+		},
+		{
+			_class = "C_OP_RampScalarLinearSimple"
+			m_Rate = -50.000000
+			m_flEndTime = 99999.000000
+			m_nOpEndCapState = 1
+		},
+		{
+			_class = "C_OP_ColorInterpolate"
+		},
+		{
+			_class = "C_OP_InterpolateRadius"
+			m_flStartScale = 2.000000
+			m_flBias = 0.650000
+		},
+		{
+			_class = "C_OP_VectorNoise"
+			m_nFieldOutput = 0
+			m_vecOutputMin =
+			[
+				-5.000000,
+				-5.000000,
+				-5.000000,
+			]
+			m_vecOutputMax =
+			[
+				5.000000,
+				5.000000,
+				5.000000,
+			]
+			m_fl4NoiseScale = 0.750000
+			m_bAdditive = true
+		},
+	]
+	m_Renderers =
+	[
+		{
+			_class = "C_OP_RenderSprites"
+			m_flMaxSize = 0.250000
+			m_flStartFadeSize = 0.200000
+			m_flEndFadeSize = 0.250000
+			m_flAnimationRate = 1.250000
+			m_nSequenceCombineMode = "2"
+			m_flAddSelfAmount = 1.000000
+			m_nRefractBlurType = "2"
+			m_hTexture = resource:"materials/particle/smoke/maya_wispy/wispy_small.vtex"
+			m_bDisableOperator = true
+		},
+	]
+	m_Initializers =
+	[
+		{
+			_class = "C_INIT_CreateWithinSphere"
+			m_nControlPointNumber = 3
+		},
+		{
+			_class = "C_INIT_RandomLifeTime"
+			m_fLifetimeMin = 0.800000
+			m_fLifetimeMax = 0.800000
+		},
+		{
+			_class = "C_INIT_RandomRotation"
+		},
+		{
+			_class = "C_INIT_RandomRadius"
+			m_flRadiusMin = 42.000000
+			m_flRadiusMax = 66.000000
+		},
+		{
+			_class = "C_INIT_RandomYawFlip"
+		},
+		{
+			_class = "C_INIT_RemapScalar"
+			m_nFieldOutput = 8
+			m_flInputMax = 0.010000
+			m_flOutputMin = -0.250000
+			m_flOutputMax = 0.000000
+			m_flStartTime = 0.010000
+			m_flEndTime = 0.010000
+		},
+		{
+			_class = "C_INIT_RandomSequence"
+			m_nSequenceMin = 10
+			m_nSequenceMax = 11
+		},
+	]
+	m_Emitters =
+	[
+		{
+			_class = "C_OP_ContinuousEmitter"
+			m_flEmitRate = 45.000000
+		},
+	]
+	m_ForceGenerators =
+	[
+		{
+			_class = "C_OP_AttractToControlPoint"
+			m_fForceAmount = 150.000000
+			m_fFalloffPower = 0.000000
+			m_nControlPointNumber = 1
+		},
+	]
+}

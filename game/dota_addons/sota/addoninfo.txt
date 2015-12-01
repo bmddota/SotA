@@ -1,0 +1,22 @@
+"AddonInfo"
+{
+  "TeamCount" "2"
+  "maps"      "caldera caldera_max"
+  "IsPlayable"  "1"
+  "caldera"
+  {
+          "MaxPlayers"                    "12"
+  }
+  "caldera_max"
+  {
+          "MaxPlayers"                    "24"
+  }
+//  "desert_duo"
+//  {
+//          "MaxPlayers"                    "10"
+//  }
+//  "forest_solo"
+//  {
+//          "MaxPlayers"                    "10"
+//  }
+}
