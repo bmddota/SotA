@@ -1,0 +1,114 @@
+// THIS FILE IS AUTO-GENERATED
+
+Layer0
+{
+	shader "hero.vfx"
+
+	//---- 2-Sided Rendering ----
+	F_RENDER_BACKFACES 1
+
+	//---- Cloak ----
+	F_ENABLE_CLOAK 1
+
+	//---- Detail ----
+	F_DETAIL 3 // Mod2X
+	F_DETAIL_2 2 // Add Self Illum
+
+	//---- Effect Proxies ----
+	F_USE_HERO_EFFECTS_PROXY 1
+	F_USE_STATUS_EFFECTS_PROXY 1
+
+	//---- Masks ----
+	F_MASKS_1 1
+	F_MASKS_2 1
+
+	//---- Specular ----
+	F_MASK_CUBE_MAP_BY_METALNESS 1
+	F_SPECULAR_CUBE_MAP 1
+
+	//---- Translucency ----
+	F_TRANSLUCENT 1
+
+	//---- Warp ----
+	F_COLOR_WARP 1
+	F_FRESNEL_COLOR_WARP 1
+	F_SPECULAR_WARP 1
+
+	//---- Blend To Full ----
+	g_flDetailBlendToFull "0.000"
+	g_flEnvMapBlendToFull "0.000"
+	g_flMetalnessBlendToFull "0.000"
+	g_flReflectionsTintByBaseBlendToNone "0.000"
+	g_flSelfIllumBlendToFull "0.000"
+	g_flSpecularBlendToFull "0.000"
+	g_flSpecularExponentBlendToFull "0.000"
+
+	//---- Cloak ----
+	g_flCloakBlurAmount "0.005"
+	g_flCloakIntensity "0.850"
+	g_flCloakRefractAmount "0.100"
+	g_flMaterialCloakFactor "0.000"
+	g_vCloakColorTint "[1.000000 1.000000 1.000000 0.000000]"
+
+	//---- Color ----
+	g_flColorWarpBlendFactor "1.000"
+	g_flDiffuseModulationAmount "1.000"
+	g_vTexCoordOffset "[0.031 -0.469]"
+	g_vTexCoordScale "[0.500 0.500]"
+	TextureColor "[0.141176 0.282353 0.345098 1.000000]"
+	TextureColorWarp3D "materials/default/default_colorwarp3D_z000.tga"
+
+	//---- Detail 1 ----
+	g_flDetailBlendFactor "0.937"
+	g_vDetailTexCoordOffset "[0.063 0.000]"
+	g_vDetailTexCoordScale "[0.001 0.300]"
+	TextureDetail "materials/dev/water_normal.tga"
+
+	//---- Detail 2 ----
+	g_flDetail2BlendFactor "0.544"
+	g_vDetail2TexCoordOffset "[0.188 -0.812]"
+	g_vDetail2TexCoordScale "[0.200 1.000]"
+	TextureDetail2 "materials/dev/film_grain_noise.tga"
+
+	//---- Fresnel ----
+	TextureFresnelColorWarp3D "materials/default/default_colorwarp3D_z000.tga"
+	TextureFresnelWarpColor "materials/default/default_fresnelwarpcolor.tga"
+	TextureFresnelWarpRim "materials/default/default_fresnelwarprim.tga"
+	TextureFresnelWarpSpec "materials/default/default_fresnelwarpspec.tga"
+
+	//---- Lighting ----
+	g_flAmbientScale "6.567"
+	g_flBloomScale "0.701"
+	g_flBloomShift "0.373"
+	g_vBloomColor "[0.780392 0.815686 0.866667 0.000000]"
+	TextureSpecularWarp "materials/default/default_fresnelwarprim.tga"
+
+	//---- Mask 1 ----
+	TextureDetailMask "materials/dev/panel_height.tga"
+	TextureDiffuseWarpMask "materials/dev/panel_height.tga"
+	TextureMetalnessMask "materials/dev/panel_height.tga"
+	TextureSelfIllumMask "materials/dev/noillum_primary_green_color.tga"
+
+	//---- Mask 2 ----
+	TextureRimMask "materials/dev/panel_height.tga"
+	TextureSpecularExponent "materials/dev/water_normal.tga"
+	TextureSpecularMask "materials/dev/panel_height.tga"
+	TextureTintByBaseMask "materials/dev/panel_height.tga"
+
+	//---- Normal Map ----
+	TextureNormal "materials/dev/water_normal.tga"
+
+	//---- Rim ----
+	g_flRimLightScale "41.772"
+	g_vRimLightColor "[0.266667 0.490196 0.509804 0.000000]"
+
+	//---- Specular ----
+	g_flCubeMapScalar "2.000"
+	g_flSpecularExponent "65.684"
+	g_flSpecularScale "7.000"
+	g_vSpecularColor "[0.478431 0.478431 0.478431 0.000000]"
+	TextureCubeMap "materials/default/dota_default_cube.tga"
+
+	//---- Translucency ----
+	TextureTranslucency "[0.276000 0.276000 0.276000 0.000000]"
+}

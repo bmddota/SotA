@@ -1,0 +1,37 @@
+// THIS FILE IS AUTO-GENERATED
+
+Layer0
+{
+	shader "global_lit_simple.vfx"
+
+	//---- Normal Maps ----
+	F_NORMAL_MAP 1
+
+	//---- Scroll UV ----
+	F_SCROLL_UV 2 // Scroll All Textures
+
+	//---- Translucent ----
+	F_ADDITIVE_BLEND 1
+	F_ALPHA_ANGLE_POWER 1
+	F_TRANSLUCENT 1
+
+	//---- Color ----
+	g_vColorTint "[0.972549 0.972549 0.972549 1.000000]"
+	g_vTexCoordOffset "[0.000 0.000]"
+	g_vTexCoordScale "[4.048 3.238]"
+	TextureColor "materials/texture_samples/ice_1.tga"
+
+	//---- Normal Map ----
+	g_flBumpStrength "0.847"
+	TextureNormal "materials/texture_samples/fx_clouds_0_normal.tga"
+
+	//---- Scroll UV ----
+	g_flScrollUvSpeed "0.769"
+	g_vScrollUvDirection "[-4.603 -6.250]"
+	TextureScrollSpeed "[0.074000 0.074000 0.074000 0.000000]"
+
+	//---- Translucent ----
+	g_flAlphaAnglePower "2.373"
+	g_flOpacityScale "0.398"
+	TextureTranslucency "[0.509000 0.509000 0.509000 0.000000]"
+}
