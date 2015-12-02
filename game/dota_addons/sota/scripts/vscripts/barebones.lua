@@ -42,7 +42,7 @@ REMOVE_ILLUSIONS_ON_DEATH = false       -- Should we remove all illusions if the
 DISABLE_GOLD_SOUNDS = false             -- Should we disable the gold sound when players get gold?
 
 END_GAME_ON_KILLS = true                -- Should the game end after a certain number of kills?
-KILLS_TO_END_GAME_FOR_TEAM = 100         -- How many kills for a team should signify an end of game?
+KILLS_TO_END_GAME_FOR_TEAM = 200         -- How many kills for a team should signify an end of game?
 
 USE_CUSTOM_HERO_LEVELS = true           -- Should we allow heroes to have custom levels?
 MAX_LEVEL = 50                          -- What level should we let heroes get to?
@@ -118,36 +118,48 @@ function GameMode:Sota_Aim(msg)
 
   if msg.x then
     lookat = Vector(msg.x, msg.y, msg.z)
+
+    --DebugDrawCircle(lookat, Vector(0,255,0), 1, 10, true, .01)  
+    dir = (lookat - (hero:GetAbsOrigin() + hero.shotOffset)):Normalized()
+    local ang = player:GetAngles()
+    local pfor = RotatePosition(Vector(0,0,0), QAngle(0, ang.y,0), Vector(1,0,0))
+    if dir:Dot(pfor) < 0 then
+      dir = RotatePosition(Vector(0,0,0), QAngle(ang.x - 18,ang.y,0), Vector(1,0,0))
+      msg.index = nil
+    end
   end
   if msg.index then
     local target = EntIndexToHScript(msg.index)
     if target then
-      local torg = target:GetAbsOrigin() + hero.shotOffset
+      local height = target.height
+      if height then 
+        height = height / 2
+      else
+        height = 80
+      end
+
+      local torg = target:GetAbsOrigin() + Vector(0,0,height)
       local d = (torg - (hero:GetAbsOrigin() + hero.shotOffset)):Normalized()
       d = VectorToAngles(d)
 
       local ang = player:GetAngles()
 
-      dir = RotatePosition(Vector(0,0,0), QAngle(d.x,ang.y,0), Vector(1,0,0))
+      local tdir = RotatePosition(Vector(0,0,0), QAngle(d.x,ang.y,0), Vector(1,0,0))
+      if not dir or VectorDistanceSq(lookat,torg) > 900 * 900 then
+        dir = tdir
+      end
     end
   end
+  
 
   --print("lookat: ", lookat)
   --print(player:GetAngles(), player:GetAnglesAsVector())
   
 
   
-  if lookat then
-    --DebugDrawCircle(lookat, Vector(0,255,0), 1, 10, true, .01)  
-    dir = (lookat - (hero:GetAbsOrigin() + hero.shotOffset)):Normalized()
+  if dir == nil then
     local ang = player:GetAngles()
-    local pfor = RotatePosition(Vector(0,0,0), QAngle(0, ang.y,0), Vector(1,0,0))
-    if dir:Dot(pfor) < 0 then
-      dir = RotatePosition(Vector(0,0,0), QAngle(ang.x - 20,ang.y,0), Vector(1,0,0))
-    end
-  elseif dir == nil then
-    local ang = player:GetAngles()
-    dir = RotatePosition(Vector(0,0,0), QAngle(ang.x - 20,ang.y,0), Vector(1,0,0))
+    dir = RotatePosition(Vector(0,0,0), QAngle(ang.x - 18,ang.y,0), Vector(1,0,0))
   end
 
   local ang = hero:GetAngles()
@@ -162,6 +174,17 @@ function GameMode:Sota_Aim(msg)
   if hero.useReticle then
     local aimpos = hero:GetAbsOrigin() + hero.aim * hero.reticleDistance + hero.reticleOffset
     hero.reticle:SetAbsOrigin(aimpos)
+  end
+end
+
+function GameMode:Sota_Set_Setting(msg)
+  local pid = msg.PlayerID
+  local name = msg.name
+  local value = msg.value
+
+  if name == "score_max" then
+    KILLS_TO_END_GAME_FOR_TEAM = value
+    CustomNetTables:SetTableValue("sotaui", "score_max", {value=KILLS_TO_END_GAME_FOR_TEAM})
   end
 end
 
@@ -185,6 +208,7 @@ function GameMode:OnFirstPlayerLoaded()
 
   CustomNetTables:SetTableValue("sotaui", "radiant_score", {value=0})
   CustomNetTables:SetTableValue("sotaui", "dire_score", {value=0})
+  CustomNetTables:SetTableValue("sotaui", "score_max", {value=KILLS_TO_END_GAME_FOR_TEAM})
 
   --allegiance stuff
   local allegiances = {[DOTA_TEAM_GOODGUYS] = 1,
@@ -338,6 +362,7 @@ function GameMode:OnFirstPlayerLoaded()
   end)
 
   CustomGameEventManager:RegisterListener("Sota_Aim", Dynamic_Wrap(GameMode, "Sota_Aim"))
+  CustomGameEventManager:RegisterListener("Sota_Set_Setting", Dynamic_Wrap(GameMode, "Sota_Set_Setting"))
 
   CameraManager:CameraRotateHandler(function(player, yaw, pitch)
     print('camang: ' .. player:GetPlayerID(), yaw, pitch)
@@ -543,7 +568,6 @@ function GameMode:OnHeroInGame(hero)
   end
 
   --KILLS_TO_END_GAME_FOR_TEAM = math.max(radiantCount, direCount) * 10  
-  KILLS_TO_END_GAME_FOR_TEAM = 200
   KILL_POINTS = math.ceil(10/math.max(radiantCount, direCount))
 
   hero:SetGold(0,true)
@@ -618,6 +642,8 @@ function GameMode:OnHeroInGame(hero)
   --ControlOverride:SendCvar(pid, "dota_render_crop_height", "0") -- Renders the bottom part of the screen
   ControlOverride:SendCvar(pid, "dota_camera_z_interp_speed", "0")
   ControlOverride:SendCvar(pid, "dota_camera_disable_zoom", "1")
+  ControlOverride:SendCvar(pid, "dota_camera_lock_lerp", "0")
+
   ControlOverride:SendConfig(pid, false, false, false, true)
   ControlOverride:SendKeyFilter(pid, {KEY_W, KEY_S, KEY_A, KEY_D, KEY_SPACE, KEY_SHIFT,
                                       KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6,
@@ -1090,7 +1116,7 @@ function GameMode:OnGameInProgress()
   print("[BAREBONES] The game has officially begun")
 
   --Notifications:Top(0, {text="GREEEENNNN", duration=9, style={color="green"}, continue=true})
-  Notifications:TopToAll({text="First to <font color='#FF3455'>200</font> Points Wins!", duration=5})
+  Notifications:TopToAll({text="First to <font color='#FF3455'>" .. KILLS_TO_END_GAME_FOR_TEAM .. "</font> Points Wins!", duration=5})
   Timers:CreateTimer(5, function()
     Notifications:TopToAll({text="Kills are worth <font color='#FF3455'>" .. KILL_POINTS .. "</font>", duration=5})
     Notifications:TopToAll({text="Flag captures are worth <font color='#FF3455'>" .. FLAG_POINTS .. "</font>", duration=5})

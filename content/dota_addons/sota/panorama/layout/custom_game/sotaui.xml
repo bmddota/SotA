@@ -25,7 +25,20 @@
     </Panel>
 
     <Panel hittest="false" id="CrossHair">
-      
+
     </Panel>
+
+    <!--<Panel hittest="false" id="StatusBars">
+      <Panel hittest="false" id="HPBar">
+        <Panel hittest="false" id="HPBarLeft">
+        </Panel>
+        <Panel hittest="false" id="HPBarOverlay">
+        </Panel>
+      </Panel>
+      <Panel hittest="false" id="ManaBar">
+        <Panel hittest="false" id="ManaBarLeft">
+        </Panel>
+      </Panel>
+    </Panel>-->
   </Panel>
 </root>

@@ -17,7 +17,7 @@ function HEROMODULE:InitializeClass(hero)
 	hero.weapon = hero.activeWeapons[3]
 	hero.activeWeaponSlot = 3
 
-  hero.baseCameraDistance = 250
+  hero.baseCameraDistance = 290
 
 	hero.baseMoveSpeed = 525
 	hero.speed = 525

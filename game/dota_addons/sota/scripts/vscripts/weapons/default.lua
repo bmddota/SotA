@@ -4,7 +4,8 @@ function WEAPONMODULE:InitializeWeapon(hero)
 	local WEAPON = {}
 	WEAPON.name = "Default"
 
-	WEAPON.effectName = "particles/frostivus_gameplay/frostivus_skeletonking_hellfireblast.vpcf"
+	--WEAPON.effectName = "particles/frostivus_gameplay/frostivus_skeletonking_hellfireblast.vpcf"
+  WEAPON.effectName = "particles/bullet/bullet.vpcf"
 	WEAPON.shotSound = 'Hero_Sniper.attack2'
 	WEAPON.shotHitSound = 'Hero_Sniper.ProjectileImpact2'
 	WEAPON.reloadSound = 'SOTA.Reload'

@@ -304,6 +304,7 @@
 		"precache"
 		{
 			"particle"	"particles/frostivus_gameplay/frostivus_skeletonking_hellfireblast.vpcf"
+      "particle"  "particles/bullet/bullet.vpcf"
 			"particle"	"particles/basic_rope/basic_rope.vpcf"
 			"particle"	"particles/status_fx/status_effect_naga_riptide.vpcf"
 			"particle"	"particles/units/heroes/hero_tidehunter/tidehunter_gush_slow.vpcf"
