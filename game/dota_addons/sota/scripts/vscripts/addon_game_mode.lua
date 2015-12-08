@@ -22,7 +22,11 @@ function Precache( context )
 		PrecacheResource("particle", "particles/econ/generic/generic_aoe_explosion_sphere_1/generic_aoe_explosion_sphere_1.vpcf", context)
 		PrecacheResource("particle_folder", "particles/test_particle", context)
 		PrecacheResource("particle", "particles/frostivus_gameplay/frostivus_throne_wraith_king_ambient_beams_f.vpcf", context)
-		PrecacheResource("particle", "particles/bullet/bullet.vpcf", context)
+		PrecacheResource("particle_folder", "particles/bullet", context)
+		PrecacheResource("particle", "particles/orb/shield.vpcf", context)
+
+		PrecacheResource("particle_folder", "particles/sota_mirana", context)
+		PrecacheResource("particle_folder", "particles/sota_windrunner", context)
 
 		-- Models can also be precached by folder or individually
 		-- PrecacheModel should generally used over PrecacheResource for individual models
@@ -30,8 +34,12 @@ function Precache( context )
 		PrecacheResource("model", "particles/heroes/viper/viper.vmdl", context)
 		PrecacheModel("models/heroes/viper/viper.vmdl", context)
 
+
+
 		-- Sounds can precached here like anything else
 		PrecacheResource("soundfile", "soundevents/game_sounds_heroes/game_sounds_gyrocopter.vsndevts", context)
+		PrecacheResource("soundfile", "soundevents/sota_mirana.vsndevts", context)
+		PrecacheResource("soundfile", "soundevents/sota_windrunner.vsndevts", context)
 
 		-- Entire items can be precached by name
 		-- Abilities can also be precached in this way despite the name
@@ -40,8 +48,14 @@ function Precache( context )
 
 		-- Entire heroes (sound effects/voice/models/particles) can be precached with PrecacheUnitByNameSync
 		-- Custom units from npc_units_custom.txt can also have all of their abilities and precache{} blocks precached in this way
-		PrecacheUnitByNameSync("npc_dota_hero_ancient_apparition", context)
-		PrecacheUnitByNameSync("npc_dota_hero_enigma", context)
+		--PrecacheUnitByNameSync("npc_dota_hero_ancient_apparition", context)
+		--PrecacheUnitByNameSync("npc_dota_hero_enigma", context)
+
+		PrecacheResource("particle", "particles/ui_mouseactions/hero_ring.vpcf", context)
+		PrecacheResource("particle", "particles/ui_mouseactions/hero_ring_b.vpcf", context)
+		PrecacheResource("particle", "particles/ui_mouseactions/select_hero_active.vpcf", context)
+		PrecacheResource("particle", "particles/ui_mouseactions/selected_ring.vpcf", context)
+		PrecacheResource("particle", "particles/ui_mouseactions/selected_ring_b.vpcf", context)
 end
 
 -- Create the game mode when we activate

@@ -1,0 +1,220 @@
+//dota_update_default
+//dota_src1_3d
+//dota_src1_2d
+//dota_update_vo_clamped
+
+"SOTA.BowAttack"
+{
+"operator_stacks"
+{
+	"update_stack"
+	{
+		"reference_operator"
+		{
+			"operator"		"sos_reference_stack"
+			"reference_stack"		"dota_src1_3d"
+			"operator_variables"
+			{
+				"vsnd_files"
+				{
+					"value"
+					{
+						"wave0"		"sounds/weapons/hero/mirana/miranaarrowlaunch1.vsnd"
+						"wave1"		"sounds/weapons/hero/mirana/miranaarrowlaunch2.vsnd"
+						"wave2"		"sounds/weapons/hero/mirana/miranaarrowlaunch3.vsnd"
+						"wave3"		"sounds/weapons/hero/mirana/miranaarrowlaunch4.vsnd"
+					}
+				}
+				"volume"
+				{
+					"value"		"0.600000"
+				}
+				"pitch_rand_min"
+				{
+					"value"		"-0.050000"
+				}
+				"pitch_rand_max"
+				{
+					"value"		"0.050000"
+				}
+				"pitch"
+				{
+					"value"		"1.000000"
+				}
+				"soundlevel"
+				{
+					"value"		"75.000000"
+				}
+				"distance_max"
+				{
+					"value"		"2500.000000"
+				}
+				"event_type"
+				{
+					"value"		"1.000000"
+				}
+        "limiter_on"
+				{
+					"value"		"0.000000"
+				}
+			}
+		}
+	}
+}
+}
+
+"SOTA.Leap"
+{
+"operator_stacks"
+{
+	"update_stack"
+	{
+		"reference_operator"
+		{
+			"operator"		"sos_reference_stack"
+			"reference_stack"		"dota_src1_3d"
+			"operator_variables"
+			{
+				"vsnd_files"
+				{
+					"value"
+					{
+						"wave0"		"sounds/weapons/hero/mirana/leap1.vsnd"
+						"wave1"		"sounds/weapons/hero/mirana/leap2.vsnd"
+					}
+				}
+				"volume"
+				{
+					"value"		"1.000000"
+				}
+				"pitch_rand_min"
+				{
+					"value"		"-0.050000"
+				}
+				"pitch_rand_max"
+				{
+					"value"		"0.050000"
+				}
+				"pitch"
+				{
+					"value"		"1.000000"
+				}
+				"soundlevel"
+				{
+					"value"		"81.000000"
+				}
+				"mixgroup"
+				{
+					"value"		"Weapons"
+				}
+				"spread_radius"
+				{
+					"value"		"300.000000"
+				}
+        "limiter_on"
+				{
+					"value"		"0.000000"
+				}
+			}
+		}
+	}
+}
+}
+
+"SOTA.ArrowCast"
+{
+"operator_stacks"
+{
+	"update_stack"
+	{
+		"reference_operator"
+		{
+			"operator"		"sos_reference_stack"
+			"reference_stack"		"dota_src1_3d"
+			"operator_variables"
+			{
+				"vsnd_files"
+				{
+					"value"
+					{
+						"value0"		"sounds/weapons/hero/mirana/arrow.vsnd"
+					}
+				}
+				"volume"
+				{
+					"value"		"1.000000"
+				}
+				"pitch"
+				{
+					"value"		"1.000000"
+				}
+				"soundlevel"
+				{
+					"value"		"81.000000"
+				}
+				"mixgroup"
+				{
+					"value"		"Weapons"
+				}
+				"spread_radius"
+				{
+					"value"		"300.000000"
+				}
+        "limiter_on"
+				{
+					"value"		"0.000000"
+				}
+			}
+		}
+	}
+}
+}
+
+"SOTA.PowershotPull"
+{
+"operator_stacks"
+{
+	"update_stack"
+	{
+		"reference_operator"
+		{
+			"operator"		"sos_reference_stack"
+			"reference_stack"		"dota_src1_3d"
+			"operator_variables"
+			{
+				"vsnd_files"
+				{
+					"value"
+					{
+						"value0"		"sounds/weapons/hero/windrunner/windrunner_powershot_pull.vsnd"
+					}
+				}
+				"volume"
+				{
+					"value"		"1.000000"
+				}
+				"pitch"
+				{
+					"value"		"1.000000"
+				}
+				"soundlevel"
+				{
+					"value"		"78.000000"
+				}
+				"distance_max"
+				{
+					"value"		"2500.000000"
+				}
+				"event_type"
+				{
+					"value"		"1.000000"
+				}
+        "limiter_on"
+				{
+					"value"		"0.000000"
+				}
+			}
+		}
+	}
+}
+}

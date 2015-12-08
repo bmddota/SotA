@@ -4,41 +4,71 @@
     <include src="file://{resources}/styles/custom_game/sotaui.css" />
   </styles>
   <scripts>
+    <include src="file://{resources}/scripts/custom_game/playertables/playertables.js" /> 
     <include src="file://{resources}/scripts/custom_game/sotaui.js" /> 
   </scripts>
   <Panel hittest="false" class="SotaBase">
-    <Panel id="Score">
-      <Label id="RadiantScore" text="9999"/>
-      <Label id="DireScore" text="9999"/>
+    <Panel hittest="false" id="Score">
+      <Label hittest="false" id="RadiantScore" text="9999"/>
+      <Label hittest="false" id="DireScore" text="9999"/>
     </Panel>
     <Panel hittest="false" class="Bound" id="LeftBound">
-      <Label html="true" text="&lt;img src='file://{images}/custom_game/loading_screen/rightclick.png'&gt;"/>
+      <Label hittest="false" html="true" text="&lt;img src='file://{images}/custom_game/loading_screen/rightclick.png'&gt;"/>
     </Panel>
     <Panel hittest="false" class="Bound" id="RightBound">
-      <Label html="true" text="&lt;img src='file://{images}/custom_game/loading_screen/rightclick.png'&gt;"/>
+      <Label hittest="false" html="true" text="&lt;img src='file://{images}/custom_game/loading_screen/rightclick.png'&gt;"/>
     </Panel>
     <Panel hittest="false" class="Bound" id="TopBound">
-      <Label html="true" text="&lt;img src='file://{images}/custom_game/loading_screen/rightclick.png'&gt;"/>
+      <Label hittest="false" html="true" text="&lt;img src='file://{images}/custom_game/loading_screen/rightclick.png'&gt;"/>
     </Panel>
     <Panel hittest="false" class="Bound" id="BottomBound">
-      <Label html="true" text="&lt;img src='file://{images}/custom_game/loading_screen/rightclick.png'&gt;"/>
+      <Label hittest="false" html="true" text="&lt;img src='file://{images}/custom_game/loading_screen/rightclick.png'&gt;"/>
     </Panel>
 
     <Panel hittest="false" id="CrossHair">
 
-    </Panel>
+    </Panel> 
 
-    <!--<Panel hittest="false" id="StatusBars">
+    <Panel hittest="false" id="StatusBars">
       <Panel hittest="false" id="HPBar">
         <Panel hittest="false" id="HPBarLeft">
         </Panel>
-        <Panel hittest="false" id="HPBarOverlay">
-        </Panel>
+        <Label hittest="false" id="HPText" class="UIText" text="999"/>
       </Panel>
       <Panel hittest="false" id="ManaBar">
         <Panel hittest="false" id="ManaBarLeft">
         </Panel>
+        <Label hittest="false" id="ManaText" class="UIText" text="999"/>
       </Panel>
-    </Panel>-->
+    </Panel>
+
+    <Panel hittest="false" id="Weapons">
+      <Panel hittest="false" class="WeaponBar" id="WeaponBar1">
+        <Label hittest="false" text="Knife" class="WeaponName UIText"/>
+        <Label hittest="false" text="1" class="WeaponKey UIText"/>
+      </Panel>
+      <Panel hittest="false" class="WeaponBar" id="WeaponBar2">
+        <Label hittest="false" text="Pistol" class="WeaponName UIText"/>
+        <Label hittest="false" text="2" class="WeaponKey UIText"/>
+      </Panel>
+      <Panel hittest="false" class="WeaponBar WeaponActive" id="WeaponBar3">
+        <Label hittest="false" text="Raze" class="WeaponName UIText"/>
+        <Label hittest="false" text="3" class="WeaponKey UIText"/>
+      </Panel>
+    </Panel>
+
+    <Panel hittest="false" id="Ammo">
+      <Label hittest="false" id="AmmoCurrent" class="UIText" text="30" />
+      <Label hittest="false" id="AmmoSplit" class="UIText" text="/"/>
+      <Label hittest="false" id="AmmoReserve" class="UIText" text="123"/>
+      <Label hittest="false" id="KDA" class="UIText" text="0/0/0"/>
+    </Panel>
+
+    <Panel hittest="false" id="TimeBar">
+      <Panel hittest="false" id="TimeBarLeft" class="TimeYellow"> 
+      </Panel>
+      <Label hittest="false" id="TimeName" class="UIText" text="Reload"/>
+      <Label hittest="false" id="TimeText" class="UIText" text="99.9"/>
+    </Panel>
   </Panel>
 </root>

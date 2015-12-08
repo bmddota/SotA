@@ -31,8 +31,6 @@ function HEROMODULE:InitializeClass(hero)
     hero.speed = 600
     hero.height = 215
 
-	FireGameEvent("weapon_change", {pid=hero:GetPlayerID(), weapon=hero.weapon.name, time=0})
-
     hero.flamesParticle = ParticleManager:CreateParticle("particles/test_particle/color_flames.vpcf", PATTACH_ABSORIGIN_FOLLOW, hero)
     ParticleManager:SetParticleControl(hero.flamesParticle, 1, hero.renderColor[hero:GetTeam()])
 end

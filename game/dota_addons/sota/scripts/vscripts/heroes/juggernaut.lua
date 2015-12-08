@@ -1,18 +1,18 @@
 local HEROMODULE = {}
 
 function HEROMODULE:InitializeClass(hero)
-	require('heroes/default'):InitializeClass(hero)
+  require('heroes/default'):InitializeClass(hero)
 
-	hero.weaponSet = {{knife=require('weapons/knife'):InitializeWeapon(hero)},
-	       			 {pistol=require('weapons/pistol'):InitializeWeapon(hero)},
-					 {sword=require('weapons/sword'):InitializeWeapon(hero)}}
+  hero.weaponSet = {{knife=require('weapons/knife'):InitializeWeapon(hero)},
+               {pistol=require('weapons/pistol'):InitializeWeapon(hero)},
+           {sword=require('weapons/sword'):InitializeWeapon(hero)}}
 
-	hero.activeWeapons = {hero.weaponSet[1]["knife"],
-						  hero.weaponSet[2]["pistol"],
-						  hero.weaponSet[3]["sword"]}
+  hero.activeWeapons = {hero.weaponSet[1]["knife"],
+              hero.weaponSet[2]["pistol"],
+              hero.weaponSet[3]["sword"]}
 
-	hero.weapon = hero.activeWeapons[3]
-	hero.activeWeaponSlot = 3
+  hero.weapon = hero.activeWeapons[3]
+  hero.activeWeaponSlot = 3
 
   hero.baseMoveSpeed = 750
   hero.speed = 750
@@ -22,17 +22,15 @@ function HEROMODULE:InitializeClass(hero)
   hero.height = 190
 
   local MOVE_SKILL_SPEED = 1200
-	local MOVE_SKILL_COST = 10
-	local usingSkill = false
-	local skillParticle = nil
+  local MOVE_SKILL_COST = 10
+  local usingSkill = false
+  local skillParticle = nil
 
-	hero.moveSkillCooldown = 1.0
+  hero.moveSkillCooldown = 1.0
 
-	FireGameEvent("weapon_change", {pid=hero:GetPlayerID(), weapon=hero.weapon.name, time=0})
-
-	function hero:OnMovementSkillKeyDown()
-		--print('[HeroClass-Default] OnMovementSkillKeyDown')
-		local gametime = GameRules:GetGameTime()
+  function hero:OnMovementSkillKeyDown()
+    --print('[HeroClass-Default] OnMovementSkillKeyDown')
+    local gametime = GameRules:GetGameTime()
 
     if not hero:IsAlive() or hero.lastShift + hero.moveSkillCooldown > gametime or hero:GetMana() < MOVE_SKILL_COST then
       return
@@ -49,38 +47,38 @@ function HEROMODULE:InitializeClass(hero)
     hero:EmitSound('Item.Maelstrom.Chain_Lightning')
 
     hero.skillTimer = Timers:CreateTimer(.1, function()
-    	if not hero:IsAlive() or hero:GetMana() < MOVE_SKILL_COST then
-    		hero:OnMovementSkillKeyUp()
-	      return
-	    end
+      if not hero:IsAlive() or hero:GetMana() < MOVE_SKILL_COST then
+        hero:OnMovementSkillKeyUp()
+        return
+      end
 
-    	hero:SpendMana(MOVE_SKILL_COST, hero)
-    	return .1
+      hero:SpendMana(MOVE_SKILL_COST, hero)
+      return .1
     end)
-	end
+  end
 
-	function hero:OnMovementSkillKeyUp()
-		if not usingSkill then
-			return
-		end
+  function hero:OnMovementSkillKeyUp()
+    if not usingSkill then
+      return
+    end
 
-		if hero.skillTimer then
-    	Timers:RemoveTimer(hero.skillTimer)
-    	hero.skillTimer = nil
+    if hero.skillTimer then
+      Timers:RemoveTimer(hero.skillTimer)
+      hero.skillTimer = nil
     end
 
     if skillParticle then
-    	ParticleManager:DestroyParticle(skillParticle, false)
-    	skillParticle = nil
+      ParticleManager:DestroyParticle(skillParticle, false)
+      skillParticle = nil
     end
-		--print('[HeroClass-Default] OnMovementSkillKeyUp')
-		local gametime = GameRules:GetGameTime()
-		hero.lastShift = gametime
+    --print('[HeroClass-Default] OnMovementSkillKeyUp')
+    local gametime = GameRules:GetGameTime()
+    hero.lastShift = gametime
 
-		hero.dodgeProjectiles = false
-		hero.speed = hero.baseMoveSpeed
-		usingSkill = false
-	end
+    hero.dodgeProjectiles = false
+    hero.speed = hero.baseMoveSpeed
+    usingSkill = false
+  end
 end
 
 return HEROMODULE

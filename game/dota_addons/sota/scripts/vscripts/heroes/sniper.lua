@@ -19,13 +19,11 @@ function HEROMODULE:InitializeClass(hero)
 
   hero.baseCameraDistance = 290
 
-	hero.baseMoveSpeed = 525
-	hero.speed = 525
+	hero.baseMoveSpeed = 560
+	hero.speed = 560
 	hero.height = 160
 
 	hero.moveSkillCooldown = .5
-
-	FireGameEvent("weapon_change", {pid=hero:GetPlayerID(), weapon=hero.weapon.name, time=0})
 
 	function hero:OnMovementSkillKeyDown()
 		--print('[HeroClass-Default] OnMovementSkillKeyDown')

@@ -23,7 +23,7 @@ function WEAPONMODULE:InitializeWeapon(hero)
 	WEAPON.distance = 8500
 	WEAPON.radiusStart = 100
 	WEAPON.radiusEnd = 100
-	WEAPON.damageMin = 101
+	WEAPON.damageMin = 35
 	WEAPON.damageMax = 101
 	WEAPON.speed = 18000
 
@@ -42,6 +42,8 @@ function WEAPONMODULE:InitializeWeapon(hero)
   WEAPON.charging = false
 
   local MOVE_SPEED = 200
+  local CHARGE_MAX = 4
+  local DAMAGE_SCALING = {30,20,15,10}
 
 	function WEAPON:OnLeftClickDown()
 		local gametime = GameRules:GetGameTime()
@@ -70,7 +72,10 @@ function WEAPONMODULE:InitializeWeapon(hero)
       hero.speed = MOVE_SPEED
       WEAPON.charging = true
       hero:EmitSound('SOTA.GunCock')
-      FireGameEvent("sota_charge", {pid=hero:GetPlayerID(), time=3})
+      local player = hero:GetPlayerOwner()
+      if player then
+        CustomGameEventManager:Send_ServerToPlayer(player, "sota_charge", {time=CHARGE_MAX} )
+      end
       --ControlOverride:SendCvar(hero:GetPlayerID(), "dota_camera_fov_max", "50")
       --hero.aimPitchOffset = 14
 
@@ -93,7 +98,10 @@ function WEAPONMODULE:InitializeWeapon(hero)
     hero.useReticle = false
     hero.reticleOffset = Vector(0,0,0)
     WEAPON.charging = false
-    FireGameEvent("sota_charge", {pid=hero:GetPlayerID(), time=0})
+    local player = hero:GetPlayerOwner()
+    if player then
+      CustomGameEventManager:Send_ServerToPlayer(player, "sota_charge", {time=0} )
+    end
     Timers:CreateTimer(.5, function()  
       --ControlOverride:SendCvar(hero:GetPlayerID(), "dota_camera_fov_max", "80")
       hero.speed = hero.baseMoveSpeed
@@ -106,10 +114,18 @@ function WEAPONMODULE:InitializeWeapon(hero)
 
     local gametime = GameRules:GetGameTime()
 
-    local chargeTime = math.min(gametime - WEAPON.chargeTime, 3)
+    local chargeTime = math.min(gametime - WEAPON.chargeTime, CHARGE_MAX)
 
     local speed = ((2 + chargeTime) / 5) * WEAPON.speed
-    local damageMult = ((2 + chargeTime) / 5)
+    local totalDamage = WEAPON.damageMin
+
+    for i=0,math.floor(CHARGE_MAX)-1 do
+      totalDamage = totalDamage + math.min(1,math.max(0,chargeTime - i)) * DAMAGE_SCALING[i+1]
+    end
+
+    print(totalDamage)
+
+    --local damageMult = ((2 + chargeTime) / 5)
 
 
     local projectile = {
@@ -147,7 +163,7 @@ function WEAPONMODULE:InitializeWeapon(hero)
         local damageTable = {
           victim = unit,
           attacker = hero,
-          damage = RandomInt(WEAPON.damageMin, WEAPON.damageMax) * damageMult,
+          damage = totalDamage,
           damage_type = DAMAGE_TYPE_PURE,
         }
 

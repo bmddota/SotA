@@ -47,7 +47,7 @@ PlayerTables.SubscribeNetTableListener = function(tableName, callback)
 PlayerTables.UnsubscribeNetTableListener = function(callbackID)
 {
   var PT = CustomNetTables.__PT;
-  $.Msg(PT);
+  //$.Msg(PT);
   var tableName = PT.listeners[callbackID];
   if (tableName){
     if (PT.tableListeners[tableName]){

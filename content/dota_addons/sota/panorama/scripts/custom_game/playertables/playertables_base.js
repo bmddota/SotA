@@ -118,7 +118,7 @@ function SendPID()
 {
   var pid = Players.GetLocalPlayer();
   var spec = Players.IsSpectator(pid);
-  $.Msg(pid, ' -- ', spec);
+  //$.Msg(pid, ' -- ', spec);
   if (pid == -1 && !spec){
     $.Schedule(1/30, SendPID);
     return;
@@ -142,7 +142,7 @@ function SendPID()
 
     _PT.TableFullUpdate = function(msg)
     {
-      $.Msg('TableFullUpdate -- ', msg);
+      //$.Msg('TableFullUpdate -- ', JSON.stringify(msg).length);
       //msg.table = UnprocessTable(msg.table);
       var newTable = msg.table;
       var oldTable = _PT.tables[msg.name];
@@ -176,7 +176,7 @@ function SendPID()
 
     _PT.UpdateTable = function(msg)
     {
-      $.Msg('UpdateTable -- ', msg);
+      //$.Msg('UpdateTable -- ', msg);
       //msg.changes = UnprocessTable(msg.changes);
 
       var table = _PT.tables[msg.name];
@@ -208,9 +208,9 @@ function SendPID()
 
     _PT.DeleteTableKeys = function(msg)
     {
-      $.Msg('DeleteTableKeys -- ', msg);
+      //$.Msg('DeleteTableKeys -- ', msg);
       var table = _PT.tables[msg.name];
-      $.Msg(table);
+      //$.Msg(table);
       if (!table)
       {
         $.Msg("PlayerTables.DeleteTableKey invoked on nonexistent playertable.");
@@ -239,7 +239,7 @@ function SendPID()
   }
 
   var _PT = CustomNetTables.__PT;
-  $.Msg(_PT.listeners);
+  //$.Msg(_PT.listeners);
 
   GameEvents.Subscribe( "pt_fu", _PT.TableFullUpdate);
   GameEvents.Subscribe( "pt_uk", _PT.UpdateTable);

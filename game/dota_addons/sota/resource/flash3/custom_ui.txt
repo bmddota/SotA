@@ -10,16 +10,16 @@
 		"File"		"ControlOverride"
 		"Depth"		"1000"
 	}
-	"2"
-	{
-		"File"		"CameraManager"
-		"Depth"		"2"
-	}
-	"3"
-	{
-		"File"		"SotAUI"
-		"Depth"		"3"
-	}
+//	"2"
+//	{
+//		"File"		"CameraManager"
+//		"Depth"		"2"
+//	}
+//	"3"
+//	{
+//		"File"		"SotAUI"
+//		"Depth"		"3"
+//	}
 	"4"
 	{
 		"File"		"ControlOverrideCover"

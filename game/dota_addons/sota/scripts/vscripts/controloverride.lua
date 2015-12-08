@@ -7,12 +7,15 @@ KEY_SHIFT = 16
 KEY_R = 82
 KEY_B = 66
 KEY_F1 = 112
+KEY_F2 = 113
 KEY_1 = 49
 KEY_2 = 50
 KEY_3 = 51
 KEY_4 = 52
 KEY_5 = 53
 KEY_6 = 54
+KEY_TAB = 9
+KEY_BACKTICK = 192
 
 if ControlOverride == nil then
   print ( '[ControlOverride] creating ControlOverride' )

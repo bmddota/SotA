@@ -2,6 +2,7 @@ require('controloverride')
 require('cameramanager')
 require('projectiles')
 require('notifications')
+require('playertables')
 
 print ('[BAREBONES] barebones.lua' )
 
@@ -63,6 +64,9 @@ if GameMode == nil then
     GameMode = class({})
 end
 
+LinkLuaModifier("modifier_unselectable", "modifiers/modifier_unselectable", LUA_MODIFIER_MOTION_NONE)
+LinkLuaModifier("modifier_stun", "modifiers/modifier_stun", LUA_MODIFIER_MOTION_NONE)
+
 
 --[[
   This function should be used to set up Async precache calls at the beginning of the game.  The Precache() function 
@@ -107,6 +111,11 @@ SLOPE_ANGLE = 45
 AIR_DRAG = .02
 FORWARD_OFFSET = 0 --200
 
+
+SMOOTH_ENABLE = "0"
+SMOOTH_DISTANCE = "0"
+SMOOTH_COUNT = "0"
+
 function GameMode:Sota_Aim(msg)
   local pid = msg.PlayerID
   if not pid then return end
@@ -115,16 +124,18 @@ function GameMode:Sota_Aim(msg)
   local lookat = nil
   local dir = nil
   local hero = player:GetAssignedHero()
+  local heropos = hero:GetAbsOrigin()
+  local ang = player:GetAngles()
+  local playerDir = RotatePosition(Vector(0,0,0), QAngle(ang.x,ang.y,0), Vector(1,0,0))
 
   if msg.x then
     lookat = Vector(msg.x, msg.y, msg.z)
 
     --DebugDrawCircle(lookat, Vector(0,255,0), 1, 10, true, .01)  
-    dir = (lookat - (hero:GetAbsOrigin() + hero.shotOffset)):Normalized()
-    local ang = player:GetAngles()
+    dir = (lookat - (heropos + hero.shotOffset)):Normalized()
     local pfor = RotatePosition(Vector(0,0,0), QAngle(0, ang.y,0), Vector(1,0,0))
-    if dir:Dot(pfor) < 0 then
-      dir = RotatePosition(Vector(0,0,0), QAngle(ang.x - 18,ang.y,0), Vector(1,0,0))
+    if dir:Dot(pfor) < 0 or VectorDistanceSq(lookat,heropos) < 200 * 200 then
+      dir = playerDir
       msg.index = nil
     end
   end
@@ -139,10 +150,8 @@ function GameMode:Sota_Aim(msg)
       end
 
       local torg = target:GetAbsOrigin() + Vector(0,0,height)
-      local d = (torg - (hero:GetAbsOrigin() + hero.shotOffset)):Normalized()
+      local d = (torg - (heropos + hero.shotOffset)):Normalized()
       d = VectorToAngles(d)
-
-      local ang = player:GetAngles()
 
       local tdir = RotatePosition(Vector(0,0,0), QAngle(d.x,ang.y,0), Vector(1,0,0))
       if not dir or VectorDistanceSq(lookat,torg) > 900 * 900 then
@@ -158,13 +167,14 @@ function GameMode:Sota_Aim(msg)
 
   
   if dir == nil then
-    local ang = player:GetAngles()
-    dir = RotatePosition(Vector(0,0,0), QAngle(ang.x - 18,ang.y,0), Vector(1,0,0))
+    dir = playerDir
   end
 
   local ang = hero:GetAngles()
   --hero:SetAngles(ang.x, yaw, ang.z)
-  hero:SetForwardVector(Vector(dir.x, dir.y, 0))
+  if hero:IsAlive() and not hero:HasModifier("modifier_stun") then
+    hero:SetForwardVector(Vector(playerDir.x, playerDir.y, 0))
+  end
 
   --local forward = hero:GetForwardVector()
   --hero.camera:SetAbsOrigin(hero:GetAbsOrigin() + forward * FORWARD_OFFSET)
@@ -188,27 +198,52 @@ function GameMode:Sota_Set_Setting(msg)
   end
 end
 
+function GameMode:DamageFilter(event)
+  --print("DamageFilter")
+  --PrintTable(event)
+  local attacker = EntIndexToHScript(event.entindex_attacker_const)
+  local victim = EntIndexToHScript(event.entindex_victim_const)
+  local inflictor = nil
+  if event.entindex_inflictor_const then
+    inflictor = EntIndexToHScript(event.entindex_inflictor_const)
+  end
+
+  if attacker ~= victim then
+    victim.lastDamagedBy = attacker
+  elseif victim.lastDamagedBy then
+    ApplyDamage({
+      victim = victim,
+      attacker = victim.lastDamagedBy,
+      damage = event.damage,
+      damage_type = event.damagetype_const,
+      --damage_flags = DOTA_DAMAGE_FLAG_NONE,
+      ability = inflictor,
+    })
+    return false
+  end
+
+  return true
+end
+
 function GameMode:OnFirstPlayerLoaded()
   print("[BAREBONES] First Player has loaded")
 
-  local mode = GameRules:GetGameModeEntity()
-  --[[mode:SetHUDVisible(0,  false) --Clock
-  mode:SetHUDVisible(1,  false)
-  mode:SetHUDVisible(2,  false)
-  mode:SetHUDVisible(6,  false)
-  mode:SetHUDVisible(7,  false) 
-  mode:SetHUDVisible(8,  false) 
-  mode:SetHUDVisible(9,  false)
-  mode:SetHUDVisible(11, false)
-  mode:SetHUDVisible(12, false)
+  GameRules:GetGameModeEntity():SetDamageFilter(Dynamic_Wrap(GameMode, "DamageFilter"), GameMode)
 
-  mode:SetHUDVisible(3,  false) --Action Panel
-  mode:SetHUDVisible(4,  false) --Minimap
-  mode:SetHUDVisible(5,  false) --Inventory]]
+  CustomGameEventManager:RegisterListener("Sota_Aim", Dynamic_Wrap(GameMode, "Sota_Aim"))
+  CustomGameEventManager:RegisterListener("Sota_Set_Setting", Dynamic_Wrap(GameMode, "Sota_Set_Setting"))
 
   CustomNetTables:SetTableValue("sotaui", "radiant_score", {value=0})
   CustomNetTables:SetTableValue("sotaui", "dire_score", {value=0})
   CustomNetTables:SetTableValue("sotaui", "score_max", {value=KILLS_TO_END_GAME_FOR_TEAM})
+
+  -- set up playertables
+  for i=0,DOTA_MAX_TEAM_PLAYERS-1 do
+    print("playertable", i)
+    if not PlayerTables:TableExists("p" .. i) then
+      PlayerTables:CreateTable("p" .. i, {ammo=0, reserve=0, weapon=3, weapon1="W1", weapon2="W2", weapon3="W3"}, {i})
+    end
+  end
 
   --allegiance stuff
   local allegiances = {[DOTA_TEAM_GOODGUYS] = 1,
@@ -288,7 +323,9 @@ function GameMode:OnFirstPlayerLoaded()
     elseif keycode == KEY_D then
       hero.right = true
     elseif keycode == KEY_SHIFT then
-      hero:OnMovementSkillKeyDown()
+      if not hero:HasModifier("modifier_stun") then
+        hero:OnMovementSkillKeyDown()
+      end
     elseif keycode == KEY_R then
       hero:OnReloadWeapon()
     elseif keycode == KEY_1 then
@@ -306,7 +343,7 @@ function GameMode:OnFirstPlayerLoaded()
     elseif keycode == KEY_SPACE then
       -- local gametime = GameRules:GetGameTime()
 
-      if not hero:IsAlive() or hero.jumps <= 0 then --or (hero.lastShift ~= nil and hero.lastShift + .75 > gametime) then
+      if not hero:IsAlive() or hero.jumps <= 0 or hero:HasModifier("modifier_stun") then --or (hero.lastShift ~= nil and hero.lastShift + .75 > gametime) then
         return
       end
 
@@ -323,6 +360,10 @@ function GameMode:OnFirstPlayerLoaded()
       --GameRules:LerpCamera(hero, hero.jumpSpeed)
 
       hero:OnJump()
+    elseif keycode == KEY_BACKTICK then
+
+    elseif keycode == KEY_TAB then
+
     end
   end)
 
@@ -343,7 +384,9 @@ function GameMode:OnFirstPlayerLoaded()
 
   ControlOverride:MouseDownHandler(function(player, leftClick)
     if not leftClick then
-      CameraManager:SendConfig(player:GetPlayerID(), false)
+      ControlOverride:SendCvar(player:GetPlayerID(), "dota_hide_cursor", "0")
+      --CameraManager:SendConfig(player:GetPlayerID(), false)
+      CustomGameEventManager:Send_ServerToPlayer(player, "camera_activate", {activate=false} )
       return
     end
 
@@ -353,7 +396,9 @@ function GameMode:OnFirstPlayerLoaded()
 
   ControlOverride:MouseUpHandler(function(player, leftClick)
     if not leftClick then
-      CameraManager:SendConfig(player:GetPlayerID(), true)
+      ControlOverride:SendCvar(player:GetPlayerID(), "dota_hide_cursor", "1")
+      --CameraManager:SendConfig(player:GetPlayerID(), true)
+      CustomGameEventManager:Send_ServerToPlayer(player, "camera_activate", {activate=true} )
       return
     end
 
@@ -361,110 +406,37 @@ function GameMode:OnFirstPlayerLoaded()
     hero:OnLeftClickUp()
   end)
 
-  CustomGameEventManager:RegisterListener("Sota_Aim", Dynamic_Wrap(GameMode, "Sota_Aim"))
-  CustomGameEventManager:RegisterListener("Sota_Set_Setting", Dynamic_Wrap(GameMode, "Sota_Set_Setting"))
-
   CameraManager:CameraRotateHandler(function(player, yaw, pitch)
-    print('camang: ' .. player:GetPlayerID(), yaw, pitch)
+    --[[print('camang: ' .. player:GetPlayerID(), yaw, pitch)
     print(player:GetAngles())
     local hero = player:GetAssignedHero()
     local ang = hero:GetAngles()
-    hero:SetAngles(ang.x, yaw, ang.z)
-
-    --local forward = hero:GetForwardVector()
-    --hero.camera:SetAbsOrigin(hero:GetAbsOrigin() + forward * FORWARD_OFFSET)
-
-    --[[hero.aim = RotatePosition(Vector(0,0,0), QAngle(pitch - hero.aimPitchOffset,yaw,0), Vector(1,0,0))
-    if hero.useReticle then
-      local aimpos = hero:GetAbsOrigin() + hero.aim * hero.reticleDistance + hero.reticleOffset
-      hero.reticle:SetAbsOrigin(aimpos)
-    end]]
+    hero:SetAngles(ang.x, yaw, ang.z)]]
   end)
 
-  
-  
-  --[[local powerUps = Entities:FindAllByClassname("npc_dota_creature")
-  for i=1,#powerUps do
-    local pUp = powerUps[i]
-    pUp.active = true
-    print(pUp:Attribute_GetFloatValue("respawn", .9))
-    pUp:SetForwardVector(RandomVector(1))
-
-    pUp.particle = ParticleManager:CreateParticle("particles/test_particle/" .. pUp:GetUnitName() .. ".vpcf", PATTACH_ABSORIGIN_FOLLOW, pUp)
-    ParticleManager:SetParticleControl(pUp.particle, 2, Vector(pUp:Attribute_GetFloatValue("scale", 1.0), 0, 0))
-  end
-  Timers:CreateTimer(function()
-    for i=1,#powerUps do
-      local pUp = powerUps[i]
-      local forward = RotatePosition(Vector(0,0,0), QAngle(0,6,0), pUp:GetForwardVector())
-
-      pUp:SetForwardVector(forward)
-    end
-    return .03
-  end)]]
-
-
-  -- ammo timer
-  --[[local previousObj = {}
-  local previousObj1 = {}
-  local previousObj2 = {}
-  local previousObj3 = {}
   Timers:CreateTimer(function()
     local obj = {}
-    for i=0,9 do
+    for i=0,DOTA_MAX_TEAM_PLAYERS-1 do
       local player = PlayerResource:GetPlayer(i)
       local hero = nil
       if player then
         hero = player:GetAssignedHero()
       end
-      if hero and hero.weapon and hero.weapon.usesAmmo and hero.weapon.ammo then
-        obj['p' .. i] = hero.weapon.ammo
-        obj['p' .. i .. 'reserve'] = hero.weapon.ammoReserve
-      else
-        obj['p' .. i] = -1
-        obj['p' .. i .. 'reserve'] = -1
+      if hero then
+        if hero.weapon and hero.weapon.usesAmmo and hero.weapon.ammo then
+          PlayerTables:SetTableValue('p' .. i, "ammo", hero.weapon.ammo)
+          PlayerTables:SetTableValue('p' .. i, "reserve", hero.weapon.ammoReserve)
+        else
+          PlayerTables:SetTableValue('p' .. i, "ammo", -1)
+          PlayerTables:SetTableValue('p' .. i, "reserve", -1)
+        end
+
+        if hero.activeWeaponSlot then
+          PlayerTables:SetTableValue('p' .. i, "weapon", hero.activeWeaponSlot)
+        end
       end
     end
 
-    local equal = true
-    for k,v in pairs(obj) do
-      if previousObj[k] ~= v then
-        equal = false
-        break
-      end
-    end
-    if not equal then
-      FireGameEvent('ammo_update', obj)
-    end
-
-    previousObj = obj
-
-    return .1
-  end)]]
-
-  local previousObj = {}
-  Timers:CreateTimer(function()
-    local obj = {}
-    for i=0,31 do
-      local player = PlayerResource:GetPlayer(i)
-      local hero = nil
-      if player then
-        hero = player:GetAssignedHero()
-      end
-      if hero and hero.weapon and hero.weapon.usesAmmo and hero.weapon.ammo then
-        obj['p' .. i] = hero.weapon.ammo
-        obj['p' .. i .. 'reserve'] = hero.weapon.ammoReserve
-      else
-        obj['p' .. i] = -1
-        obj['p' .. i .. 'reserve'] = -1
-      end
-
-      if previousObj['p' .. i] ~= obj['p' .. i] or previousObj['p' .. i .. 'reserve'] ~= obj['p' .. i .. 'reserve'] then
-        FireGameEvent('ammo_update_pid', {pid=i, ammo=obj['p' .. i], reserve=obj['p' .. i .. 'reserve']})
-      end
-    end
-
-    previousObj = obj
     return .1
   end)
 
@@ -488,6 +460,7 @@ function GameMode:OnFirstPlayerLoaded()
     GameRules.radiantFlag.grabbable = true
     GameRules.radiantFlag.active = true
     GameRules.radiantFlag:SetForwardVector(GameRules.radiantFlagSpawn:GetForwardVector())
+    GameRules.radiantFlag:AddNewModifier(GameRules.radiantFlag, nil, "modifier_unselectable", {})
 
     GameRules.touchFilter[GameRules.radiantFlag:entindex()] = GameRules.radiantFlag
   end
@@ -499,6 +472,7 @@ function GameMode:OnFirstPlayerLoaded()
     GameRules.direFlag.grabbable = true
     GameRules.direFlag.active = true
     GameRules.direFlag:SetForwardVector(GameRules.direFlagSpawn:GetForwardVector())
+    GameRules.direFlag:AddNewModifier(GameRules.direFlag, nil, "modifier_unselectable", {})
     
     GameRules.touchFilter[GameRules.direFlag:entindex()] = GameRules.direFlag
   end
@@ -539,7 +513,7 @@ function GameMode:DrawPowerups()
       if pUp.active then
         ParticleManager:SetParticleControl(pUp.particle, 2, Vector(pUp:Attribute_GetFloatValue("scale", 1.0), 0, 0))
       else
-        ParticleManager:SetParticleControl(pUp.particle, 2, Vector(pUp:Attribute_GetFloatValue("smallScale", .4), 0, 0))
+        ParticleManager:SetParticleControl(pUp.particle, 2, Vector(pUp:Attribute_GetFloatValue("smallScale", .2), 0, 0))
       end
     end
   end
@@ -634,20 +608,18 @@ function GameMode:OnHeroInGame(hero)
     end)
   end)
 
-  if PlayerResource:IsBroadcaster(pid) or pid >= 10 then
-    --broadcaster player
-    --FireGameEvent("sota_set_hero_index", {pid=pid, index=hero:entindex()})
-  end
-
   --ControlOverride:SendCvar(pid, "dota_render_crop_height", "0") -- Renders the bottom part of the screen
   ControlOverride:SendCvar(pid, "dota_camera_z_interp_speed", "0")
+  ControlOverride:SendCvar(pid, "dota_camera_smooth_enable", SMOOTH_ENABLE)
+  ControlOverride:SendCvar(pid, "dota_camera_smooth_distance", SMOOTH_DISTANCE)
+  ControlOverride:SendCvar(pid, "dota_camera_smooth_count", SMOOTH_COUNT)
   ControlOverride:SendCvar(pid, "dota_camera_disable_zoom", "1")
   ControlOverride:SendCvar(pid, "dota_camera_lock_lerp", "0")
 
   ControlOverride:SendConfig(pid, false, false, false, true)
   ControlOverride:SendKeyFilter(pid, {KEY_W, KEY_S, KEY_A, KEY_D, KEY_SPACE, KEY_SHIFT,
                                       KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6,
-                                      KEY_R, KEY_B, KEY_F1})
+                                      KEY_R, KEY_B, KEY_F1, KEY_TAB, KEY_BACKTICK})
 
   Physics:Unit(hero)
   hero:Stop()
@@ -763,15 +735,16 @@ function GameMode:OnHeroInGame(hero)
             end
 
             if END_GAME_ON_KILLS and GameMode.nDireKills >= KILLS_TO_END_GAME_FOR_TEAM then
+              CustomGameEventManager:Send_ServerToAllClients("camera_activate", {activate=false} )
               GameRules:SetSafeToLeave( true )
               GameRules:SetGameWinner( DOTA_TEAM_BADGUYS )
+              ControlOverride:SendCvarToAll("dota_hide_cursor", "0")
               ControlOverride:SendConfigToAll(false, false, false, true)
-              CameraManager:SendConfigToAll(false)
             end
             return
           end
 
-          v:SetAbsOrigin(hero:GetAbsOrigin())
+          v:SetAbsOrigin(hero:GetAbsOrigin() - Vector(0,0,60))
           v:SetForwardVector(hero:GetForwardVector())
           return .03
         end)
@@ -854,15 +827,16 @@ function GameMode:OnHeroInGame(hero)
             end
 
             if END_GAME_ON_KILLS and GameMode.nRadiantKills >= KILLS_TO_END_GAME_FOR_TEAM then
+              CustomGameEventManager:Send_ServerToAllClients("camera_activate", {activate=false} )
               GameRules:SetSafeToLeave( true )
               GameRules:SetGameWinner( DOTA_TEAM_GOODGUYS )
+              ControlOverride:SendCvarToAll("dota_hide_cursor", "0")
               ControlOverride:SendConfigToAll(false, false, false, true)
-              CameraManager:SendConfigToAll(false)
             end
             return
           end
 
-          v:SetAbsOrigin(hero:GetAbsOrigin())
+          v:SetAbsOrigin(hero:GetAbsOrigin() - Vector(0,0,60))
           v:SetForwardVector(hero:GetForwardVector())
           return .03
         end)
@@ -940,6 +914,18 @@ function GameMode:OnHeroInGame(hero)
     heroscript = require('heroes/default'):InitializeClass(hero)
   end
 
+  if hero.activeWeapons then
+    if hero.activeWeapons[1] then
+      PlayerTables:SetTableValue('p' .. pid, "weapon1", hero.activeWeapons[1].name)
+    end
+    if hero.activeWeapons[2] then
+      PlayerTables:SetTableValue('p' .. pid, "weapon2", hero.activeWeapons[2].name)
+    end
+    if hero.activeWeapons[3] then
+      PlayerTables:SetTableValue('p' .. pid, "weapon3", hero.activeWeapons[3].name)
+    end
+  end
+
   Timers:CreateTimer(.5, function()
     local heroList = HeroList:GetAllHeroes()
     for i=1,#heroList do
@@ -975,16 +961,21 @@ function GameMode:OnHeroInGame(hero)
 
     ControlOverride:SendCvar(pid, "dota_camera_z_interp_speed", "0")
     --ControlOverride:SendCvar(pid, "dota_camera_z_interp_speed", "3")
-    --ControlOverride:SendCvar(pid, "dota_camera_smooth_enable", "0")
-    --ControlOverride:SendCvar(pid, "dota_camera_smooth_distance", "0")
-    --ControlOverride:SendCvar(pid, "dota_camera_smooth_count", "0")
+    ControlOverride:SendCvar(pid, "dota_camera_smooth_enable", SMOOTH_ENABLE)
+    ControlOverride:SendCvar(pid, "dota_camera_smooth_distance", SMOOTH_DISTANCE)
+    ControlOverride:SendCvar(pid, "dota_camera_smooth_count", SMOOTH_COUNT)
 
     --[[ControlOverride:SendCvar(pid, "dota_camera_z_interp_speed", "0")
     ControlOverride:SendCvar(pid, "dota_camera_smooth_enable", "0")
     ControlOverride:SendCvar(pid, "dota_camera_smooth_distance", "0")
     ControlOverride:SendCvar(pid, "dota_camera_smooth_count", "0")]]
 
-    CameraManager:SetProperty(pid,CAMERA_DISTANCE,hero.baseCameraDistance)
+    local player = hero:GetPlayerOwner()
+    if player then
+      CustomGameEventManager:Send_ServerToPlayer(player, "camera_distance", {dist=hero.baseCameraDistance} )
+      ControlOverride:SendCvar(player:GetPlayerID(), "dota_hide_cursor", "1")
+      CustomGameEventManager:Send_ServerToPlayer(player, "camera_activate", {activate=true} )
+    end
 
     --hero.camera:FindAbilityByName("reflex_dummy_unit"):SetLevel(1)
 
@@ -1011,6 +1002,11 @@ function GameMode:OnHeroInGame(hero)
     hero.inAir = false
 
     hero:OnPhysicsFrame(function()
+      if hero.fixPosition then
+        hero:SetAbsOrigin(hero.fixPosition())
+        hero:SetPhysicsVelocity(Vector(0,0,0))
+        return
+      end
       if hero:IsAlive() then
         local pos = hero:GetAbsOrigin()
         local ground = GetGroundPosition(pos, hero)
@@ -1072,18 +1068,25 @@ function GameMode:OnHeroInGame(hero)
           if hero.right then
             rot = -90
           elseif hero.left then
-            rot = 90
+            rot = 90  
           end
+        end
+
+        if hero:HasModifier("modifier_stun") then
+          return
         end
 
         if rot ~= nil then
           hero:AddNewModifier(hero, nil, 'modifier_tutorial_forceanimation', {loop=1, activity=ACT_DOTA_RUN})
+          --hero:StartGesture(ACT_DOTA_RUN)
           dir = RotatePosition(Vector(0,0,0), QAngle(0,rot,0), forward)
         else
+          --hero:RemoveGesture(ACT_DOTA_RUN)
           hero:RemoveModifierByName('modifier_tutorial_forceanimation')
         end
 
         local speedMod = hero.speedModifier or 1
+
         hero:SetStaticVelocity('move', hero.speed * speedMod * dir)
 
         hero:OnFrame()
@@ -1378,10 +1381,11 @@ function GameMode:OnEntityKilled( keys )
       end
 
       if END_GAME_ON_KILLS and self.nRadiantKills >= KILLS_TO_END_GAME_FOR_TEAM then
+        CustomGameEventManager:Send_ServerToAllClients("camera_activate", {activate=false} )
         GameRules:SetSafeToLeave( true )
         GameRules:SetGameWinner( DOTA_TEAM_GOODGUYS )
+        ControlOverride:SendCvarToAll("dota_hide_cursor", "0")
         ControlOverride:SendConfigToAll(false, false, false, true)
-        CameraManager:SendConfigToAll(false)
       end
     elseif GameRules:IsAlly(killedUnit:GetTeam(), DOTA_TEAM_GOODGUYS) then -- and GameRules:IsAlly(killerEntity:GetTeam(), DOTA_TEAM_BADGUYS) then
       self.nDireKills = self.nDireKills + KILL_POINTS
@@ -1391,10 +1395,11 @@ function GameMode:OnEntityKilled( keys )
       end
 
       if END_GAME_ON_KILLS and self.nDireKills >= KILLS_TO_END_GAME_FOR_TEAM then
+        CustomGameEventManager:Send_ServerToAllClients("camera_activate", {activate=false} )
         GameRules:SetSafeToLeave( true )
         GameRules:SetGameWinner( DOTA_TEAM_BADGUYS )
+        ControlOverride:SendCvarToAll("dota_hide_cursor", "0")
         ControlOverride:SendConfigToAll(false, false, false, true)
-        CameraManager:SendConfigToAll(false)
       end
     end
   end
@@ -1646,11 +1651,15 @@ function GameMode:OnConnectFull(keys)
     end
   end]]
 
+
+
   Timers:CreateTimer(1, function()
     local hero = PlayerResource:GetSelectedHeroEntity(playerID)
     if hero ~= nil and GameRules:State_Get() > DOTA_GAMERULES_STATE_HERO_SELECTION and GameRules:State_Get() < DOTA_GAMERULES_STATE_POST_GAME then
-      hero.reinitNextAim = true
       ControlOverride:SendCvar(playerID, "dota_camera_z_interp_speed", "0")
+      ControlOverride:SendCvar(playerID, "dota_camera_smooth_enable", SMOOTH_ENABLE)
+      ControlOverride:SendCvar(playerID, "dota_camera_smooth_distance", SMOOTH_DISTANCE)
+      ControlOverride:SendCvar(playerID, "dota_camera_smooth_count", SMOOTH_COUNT)
       ControlOverride:SendCvar(playerID, "dota_camera_disable_zoom", "1")
       ControlOverride:SendKeyFilter(playerID, {KEY_W, KEY_S, KEY_A, KEY_D, KEY_SPACE, KEY_SHIFT,
                                       KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6,
@@ -1662,10 +1671,8 @@ function GameMode:OnConnectFull(keys)
       ControlOverride:SendCvar(playerID, "dota_camera_fov_max", "80")
       ControlOverride:SendCvar(playerID, "dota_camera_lock", "1")
       ControlOverride:SendCvar(playerID, "dota_camera_pitch_max", "35")
-      ControlOverride:SendCvar(playerID, "dota_camera_lock_lerp", ".20")
+      ControlOverride:SendCvar(playerID, "dota_camera_lock_lerp", "0")
       ControlOverride:SendCvar(playerID, "r_farz", "16000")
-
-      ControlOverride:SendCvar(playerID, "dota_camera_z_interp_speed", "0")
       --ControlOverride:SendCvar(playerID, "dota_camera_z_interp_speed", "3")
       --ControlOverride:SendCvar(playerID, "dota_camera_smooth_enable", "1")
       --ControlOverride:SendCvar(playerID, "dota_camera_smooth_distance", "0")
@@ -1676,7 +1683,11 @@ function GameMode:OnConnectFull(keys)
       ControlOverride:SendCvar(playerID, "dota_camera_smooth_distance", "0")
       ControlOverride:SendCvar(playerID, "dota_camera_smooth_count", "0")]]
 
-      CameraManager:SetProperty(playerID,CAMERA_DISTANCE,hero.baseCameraDistance)
+      CustomGameEventManager:Send_ServerToPlayer(ply, "camera_distance", {dist=hero.baseCameraDistance} )
+      ControlOverride:SendCvar(player:GetPlayerID(), "dota_hide_cursor", "1")
+      CustomGameEventManager:Send_ServerToPlayer(player, "camera_activate", {activate=true} )
+    else
+      ControlOverride:SendCvar(playerID, "dota_hide_cursor", "0")
     end
   end)
 
@@ -1750,6 +1761,19 @@ for _, hero in ipairs(HeroList:GetAllHeroes()) do
   if heroscript == nil then
     print('No hero script found for hero class: ' .. heroClass)
     heroscript = require('heroes/default'):InitializeClass(hero)
+  end
+
+  local pid = hero:GetPlayerID()
+  if hero.activeWeapons then
+    if hero.activeWeapons[1] then
+      PlayerTables:SetTableValue('p' .. pid, "weapon1", hero.activeWeapons[1].name)
+    end
+    if hero.activeWeapons[2] then
+      PlayerTables:SetTableValue('p' .. pid, "weapon2", hero.activeWeapons[2].name)
+    end
+    if hero.activeWeapons[3] then
+      PlayerTables:SetTableValue('p' .. pid, "weapon3", hero.activeWeapons[3].name)
+    end
   end
 end
 

@@ -107,19 +107,19 @@
 			[
 				0.000000,
 				0.000000,
-				80.000000,
+				110.000000,
 			]
 			m_OffsetMax =
 			[
 				0.000000,
 				0.000000,
-				80.000000,
+				110.000000,
 			]
 		},
 		{
 			_class = "C_INIT_RandomRadius"
-			m_flRadiusMin = 100.000000
-			m_flRadiusMax = 100.000000
+			m_flRadiusMin = 130.000000
+			m_flRadiusMax = 130.000000
 		},
 		{
 			_class = "C_INIT_RemapCPtoVector"

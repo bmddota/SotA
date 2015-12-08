@@ -211,4 +211,4 @@ function Timers:RemoveTimers(killAll)
   Timers.timers = timers
 end
 
-Timers:start()
+if not Timers.timers then Timers:start() end

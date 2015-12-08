@@ -1056,7 +1056,7 @@
 		"MovementSpeed"				"360"									// Speed.
 		"MovementTurnRate"			"1.0"									// Turning rate.
 
-		"StatusHealth"				"75"									// Base health.
+		"StatusHealth"				"80"									// Base health.
 		"StatusHealthRegen"			"5.0"									// Health regeneration rate.
 		"StatusMana"				"125"										// Base mana.
 		"StatusManaRegen"			"25"									// Mana regeneration rate.
@@ -1404,6 +1404,7 @@
 	{
 		"AbilityLayout" 		"6"
 		"override_hero"			"npc_dota_hero_mirana"
+    "ModelScale"        "0.690000"
 		"SoundSet"					"0"	
 		"Ability1"				"reflex_empty1" //"reflex_small_dagger"
 		"Ability2"				"reflex_empty2" //"reflex_meat_hook"
@@ -1617,7 +1618,7 @@
 		"MovementSpeed"				"360"									// Speed.
 		"MovementTurnRate"			"1.0"									// Turning rate.
 
-		"StatusHealth"				"120"									// Base health.
+		"StatusHealth"				"110"									// Base health.
 		"StatusHealthRegen"			"3.0"									// Health regeneration rate.
 		"StatusMana"				"100"										// Base mana.
 		"StatusManaRegen"			"25"									// Mana regeneration rate.
@@ -2906,8 +2907,8 @@
 		"MovementSpeed"				"360"									// Speed.
 		"MovementTurnRate"			"1.0"									// Turning rate.
 
-		"StatusHealth"				"100"									// Base health.
-		"StatusHealthRegen"			"3.0"									// Health regeneration rate.
+		"StatusHealth"				"90"									// Base health.
+		"StatusHealthRegen"			"4.0"									// Health regeneration rate.
 		"StatusMana"				"100"										// Base mana.
 		"StatusManaRegen"			"25"									// Mana regeneration rate.
 

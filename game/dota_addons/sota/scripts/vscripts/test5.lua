@@ -73,8 +73,6 @@ end
 --hero:SetModelScale(.70)
 --hero:SpendMana(50,hero)
 
---FireGameEvent("weapon_change", {pid=0, weapon="Sniper Rifle", time=3.5})
-
 package.loaded['weapons/pistol'] = nil
 hero.weapon = require('weapons/pistol'):InitializeWeapon(hero)
 hero.baseCameraDistance = 600

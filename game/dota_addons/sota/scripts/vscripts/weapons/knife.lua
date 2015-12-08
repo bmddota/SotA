@@ -22,13 +22,13 @@ function WEAPONMODULE:InitializeWeapon(hero)
   WEAPON.baseAmmo = WEAPON.ammo
   WEAPON.baseAmmoReserve = WEAPON.ammoReserve
 
-	WEAPON.cooldown = .4
+	WEAPON.cooldown = .5
 	WEAPON.distance = 45
-	WEAPON.radiusStart = 180
-	WEAPON.radiusEnd = 180
+	WEAPON.radiusStart = 170
+	WEAPON.radiusEnd = 170
 	WEAPON.damageMin = 35
 	WEAPON.damageMax = 35
-	WEAPON.speed = 2000
+	WEAPON.speed = 1400
 
 	WEAPON.switchTime = 0.5
 
