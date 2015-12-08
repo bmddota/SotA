@@ -3,25 +3,33 @@
 	_class = "CParticleSystemDefinition"
 	m_ConstantColor =
 	[
-		0,
-		0,
-		0,
+		125,
+		125,
+		125,
 		255,
 	]
 	m_flConstantRadius = 1.000000
-	m_nMaxParticles = 16
+	m_nMaxParticles = 32
 	m_Operators =
 	[
 		{
 			_class = "C_OP_Decay"
-			m_bDisableOperator = true
 		},
 		{
 			_class = "C_OP_FadeAndKill"
+			m_bDisableOperator = true
+		},
+		{
+			_class = "C_OP_FadeInSimple"
+		},
+		{
+			_class = "C_OP_FadeOutSimple"
+			m_flFadeOutTime = 0.900000
 		},
 		{
 			_class = "C_OP_InterpolateRadius"
 			m_flEndScale = 0.200000
+			m_bDisableOperator = true
 		},
 		{
 			_class = "C_OP_InterpolateRadius"
@@ -33,11 +41,16 @@
 			_class = "C_OP_ColorInterpolate"
 			m_ColorFade =
 			[
-				129,
-				129,
-				129,
+				128,
+				128,
+				128,
 				255,
 			]
+			m_flFadeStartTime = 0.500000
+			m_flFadeEndTime = 0.600000
+		},
+		{
+			_class = "C_OP_BasicMovement"
 		},
 	]
 	m_Renderers =
@@ -59,6 +72,21 @@
 			m_flAnimationRate = 25.000000
 			m_bAnimated = true
 			m_bForceDrawInterlevedWithSiblings = true
+		},
+		{
+			_class = "C_OP_RenderRopes"
+			m_flTextureVWorldSize = 1000.000000
+			m_flTextureVScrollRate = -300.000000
+			m_bClampV = true
+			m_nOrientationType = 3
+			m_flRadiusScale = 150.000000
+			m_bSaturateColorPreAlphaBlend = false
+			m_flAddSelfAmount = 3.000000
+			m_bAdditive = true
+			m_bRefract = true
+			m_flRefractAmount = 0.500000
+			m_hTexture = resource:"materials/particle/water/water_beam_01.vtex"
+			m_bDisableOperator = true
 		},
 	]
 	m_Initializers =
@@ -94,8 +122,8 @@
 			m_fRadiusMax = 30.000000
 			m_vecDistanceBias =
 			[
-				1.000000,
-				1.000000,
+				0.000000,
+				0.000000,
 				0.000000,
 			]
 		},
@@ -133,7 +161,6 @@
 		},
 		{
 			_class = "C_INIT_RandomColor"
-			m_bDisableOperator = true
 		},
 		{
 			_class = "C_INIT_RemapCPtoVector"
@@ -147,10 +174,16 @@
 			]
 			m_vOutputMax =
 			[
-				1.000000,
-				1.000000,
-				1.000000,
+				75.000000,
+				75.000000,
+				75.000000,
 			]
+		},
+		{
+			_class = "C_INIT_RandomAlpha"
+			m_nAlphaMin = 150
+			m_nAlphaMax = 150
+			m_bDisableOperator = true
 		},
 	]
 	m_Emitters =
@@ -162,7 +195,25 @@
 		},
 		{
 			_class = "C_OP_ContinuousEmitter"
-			m_flEmitRate = 16.000000
+			m_flEmitRate = 24.000000
+		},
+	]
+	m_flConstantLifespan = 0.900000
+	m_Children =
+	[
+		{
+			m_ChildRef = resource:"particles/test_particle/jugg_walk_trail.vpcf"
+		},
+		{
+			m_ChildRef = resource:"particles/test_particle/jugg_walk_blur.vpcf"
+		},
+	]
+	m_ForceGenerators =
+	[
+		{
+			_class = "C_OP_AttractToControlPoint"
+			m_fForceAmount = 3000.000000
+			m_fFalloffPower = 0.500000
 		},
 	]
 }
