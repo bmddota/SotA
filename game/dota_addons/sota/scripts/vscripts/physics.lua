@@ -1422,7 +1422,7 @@ function Physics:Unit(unit)
             end
 
             newVelocity = (-1 * newVelocity:Dot(normal) * normal) + newVelocity
-            staticSum = (-1 * staticSum(normal) * normal + newVelocity)
+            staticSum = (-1 * staticSum:Dot(normal) * normal) + staticSum
             local ndir = dir * -1
             local scalar = math.min((32+bound) / math.abs(ndir.x), (32+bound) / math.abs(ndir.y))
 
@@ -1587,25 +1587,25 @@ function Physics:Unit(unit)
       --if newPos.z > unit:GetAbsOrigin().z then print (tostring(newPos) .. ' -- ' .. tostring(unit:GetAbsOrigin())) end
       --if newPos == unit:GetAbsOrigin() and newPos ~= prevPosition then print (tostring(dontSet) .. ' -- ' .. tostring(newPos) .. ' -- ' .. tostring(unit:GetAbsOrigin())) end
       newVelLength = newVelocity:Length()
+      local groundPos = GetGroundPosition(newPos, unit)
 
       if unit.nVelocityMax > 0 and newVelLength > unit.nVelocityMax then
         newVelocity = newVelocity:Normalized() * unit.nVelocityMax
         staticSum = staticSum:Normalized() * unit.nVelocityMax
       end
 
-      if unit.vAcceleration.x == 0 and unit.vAcceleration.y == 0 and newVelLength < unit.fVelocityClamp then
+      local xylen = newVelocity:Length2D()
+      if unit.vAcceleration.x == 0 and unit.vAcceleration.y == 0 and xylen < unit.fVelocityClamp and (unit.vAcceleration.z == 0 or groundPos.z == newPos.z) then
         --print('clamp')
         newVelocity = Vector(0,0,newVelocity.z)
         staticSum = Vector(0,0,staticSum.z)
-        if unit:HasModifier("modifier_rooted") then
-          unit:RemoveModifierByName("modifier_rooted")
-        end
+
         if unit.bHibernate then
           unit:DoHibernate()
           local ent = Entities:FindInSphere(nil, position, 35)
           local blocked = false
           while ent ~= nil and not blocked do
-            if ent.IsHero ~= nil and ent ~= unit then
+            if ent.GetUnitName ~= nil and ent ~= unit then
               blocked = true
             end
             --print(ent:GetClassname() .. " -- " .. ent:GetName() .. " -- " .. tostring(ent.IsHero))
@@ -1624,7 +1624,11 @@ function Physics:Unit(unit)
           end
           return
         end
-        
+
+        --[[if unit:HasModifier("modifier_rooted") then
+          unit:RemoveModifierByName("modifier_rooted")
+        end
+
         local ent = Entities:FindInSphere(nil, position, 35)
         local blocked = false
         while ent ~= nil and not blocked do
@@ -1638,8 +1642,7 @@ function Physics:Unit(unit)
           FindClearSpaceForUnit(unit, position, true)
           unit.nSkipSlide = 1
           --print('FCS nothib lowv + blocked')
-        end 
-        --return curTime
+        end ]]
       end
 
       if not dontSetGround then
@@ -1753,7 +1756,7 @@ function Physics:Unit(unit)
   unit.nRebounceFrames = 2
   unit.vLastGoodPosition = unit:GetAbsOrigin()
   unit.bAutoUnstuck = true
-  unit.nStuckTimeout = 3
+  unit.nStuckTimeout = 600
   unit.nStuckFrames = 0
   unit.fBounceMultiplier = 1.0
   unit.oColliders = {}
@@ -2330,7 +2333,7 @@ function Physics:PrecalculateAABox(box)
 end
 
 
-Physics:start()
+if not Physics.timers then Physics:start() end
 
 Physics:CreateColliderProfile("blocker", 
   {

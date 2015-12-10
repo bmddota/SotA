@@ -228,3 +228,5 @@ pip-log.txt
 *.vxml_c
 *.vcss_c
 *.vjs_c
+
+settings.kv

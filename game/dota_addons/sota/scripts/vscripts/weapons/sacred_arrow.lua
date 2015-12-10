@@ -13,7 +13,7 @@ function WEAPONMODULE:InitializeWeapon(hero)
 	WEAPON.ammoReserve = 8
 	WEAPON.ammoMax = 16
 	WEAPON.ammoPerPickup = 4
-	WEAPON.reloadTime = 1.4
+	WEAPON.reloadTime = 1.0
   WEAPON.autoReload = true
 
   WEAPON.baseAmmo = WEAPON.ammo
@@ -25,7 +25,7 @@ function WEAPONMODULE:InitializeWeapon(hero)
 	WEAPON.radiusEnd = 110
 	WEAPON.damageMin = 40
 	WEAPON.damageMax = 75
-	WEAPON.speed = 3000
+	WEAPON.speed = 5000
 
 	WEAPON.treeBehavior = PROJECTILES_NOTHING
   WEAPON.unitBehavior = PROJECTILES_NOTHING
@@ -110,9 +110,9 @@ function WEAPONMODULE:InitializeWeapon(hero)
     local gametime = GameRules:GetGameTime()
 
     local chargeTime = math.min(gametime - WEAPON.chargeTime, CHARGE_MAX)
-    if chargeTime < 1 then
-      return
-    end
+    --if chargeTime < 1 then
+      --return
+    --end
 
     --ControlOverride:SendCvar(hero:GetPlayerID(), "dota_camera_fov_max", "80")
     Timers:CreateTimer(.5, function()  
@@ -121,8 +121,8 @@ function WEAPONMODULE:InitializeWeapon(hero)
     end)
 
     local speed = (chargeTime + 2)/3 * WEAPON.speed
-    local totalDamage =  (chargeTime + 1)/2 * (WEAPON.damageMax - WEAPON.damageMin)  + WEAPON.damageMin
-    local stunDur = (chargeTime + 1)/2
+    local totalDamage =  chargeTime * (WEAPON.damageMax - WEAPON.damageMin)  + WEAPON.damageMin
+    local stunDur = chargeTime/3 + 1/3
     print(totalDamage, stunDur)
 
 
@@ -144,7 +144,7 @@ function WEAPONMODULE:InitializeWeapon(hero)
       bCutTrees = true,
       WallBehavior = WEAPON.wallBehavior,--PROJECTILES_BOUNCE,
       GroundBehavior = WEAPON.groundBehavior,--PROJECTILES_BOUNCE,
-      fGroundOffset = 50,
+      fGroundOffset = 0,
       nChangeMax = 1,
       bRecreateOnChange = false,
       --draw = true,           --  draw = {alpha=1, color=Vector(200,0,0)},
@@ -173,6 +173,11 @@ function WEAPONMODULE:InitializeWeapon(hero)
 
         Timers:CreateTimer(stunDur, function()
           unit.fixPosition = nil
+          local org = unit:GetAbsOrigin()
+          local ground = GetGroundPosition(org, unit)
+          if ground.z > org.z then  
+            unit:SetAbsOrigin(ground)
+          end
         end)
 
         EmitSoundOnClient(hero.projectileHitSound, hero:GetPlayerOwner())

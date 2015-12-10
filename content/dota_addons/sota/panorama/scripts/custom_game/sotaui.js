@@ -9,11 +9,12 @@
 // camera library?  
 
 /*
--Added Mirana!  Mirana has a forward-momentum leap, a Repeating Crossbow, and her massive Sacred Arrow!
--Added Windranger!
--Sniper movement speed increased from 525 to 575
--Juggernaut blur particle improved in appearance (Thanks Toyoka!)
--Small aiming adjustments
+-Sacred arrow reload time reduced to 1.0
+-Changed default camera height for Mirana to allow for better long distance aiming
+-Reduced the likelihood of Sacred Arrow errantly hitting the ground
+-Fixed Sacred Arrow pushing heroes fully through the ground
+-Powershot push force reduced from 2400 to 2200
+-Added stats collection via getdotastats.com
 */
 
 
@@ -24,7 +25,7 @@ var lookatOff = 0;
 var offset = {"npc_dota_hero_nevermore":200,
               "npc_dota_hero_juggernaut":210,
               "npc_dota_hero_sniper":240,
-              "npc_dota_hero_mirana":210,
+              "npc_dota_hero_mirana":240,
               "npc_dota_hero_windrunner":210};
 
 
@@ -58,6 +59,7 @@ function Camera()
     if (offset[name]) 
       off = offset[name];
 
+    //off = 6400;
     var height = Entities.GetAbsOrigin(ent)[2];
     var lookAtHeight = height - off + lookatOff;
 

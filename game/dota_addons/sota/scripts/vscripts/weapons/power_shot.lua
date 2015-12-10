@@ -42,7 +42,7 @@ function WEAPONMODULE:InitializeWeapon(hero)
   WEAPON.charging = false
 
   local CHARGE_MAX = 1
-  local PUSH_FORCE = 2400
+  local PUSH_FORCE = 2200
 
   function WEAPON:OnLeftClickDown()
     local gametime = GameRules:GetGameTime()
@@ -167,8 +167,8 @@ function WEAPONMODULE:InitializeWeapon(hero)
         end
       end,
       --OnTreeHit = function(self, tree) ... end,
-      --OnWallHit = function(self, gnvPos)  ... end,
-      --OnGroundHit = function(self, groundPos) ... end,
+      OnWallHit = function(self, gnvPos)  print('onwallhit') end,
+      OnGroundHit = function(self, groundPos) print('ongroundhit') end,
       --OnFinish = function(self, pos) ... end,
     }
 

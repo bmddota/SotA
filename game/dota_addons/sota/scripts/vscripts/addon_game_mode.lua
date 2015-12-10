@@ -1,4 +1,4 @@
--- Generated from template
+require("statcollection/init")
 
 require('util')
 require('timers')

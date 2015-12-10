@@ -1,8 +1,10 @@
+require('libraries/timers')
+require('libraries/physics')
+require('libraries/projectiles')
+require('libraries/notifications')
+require('libraries/playertables')
 require('controloverride')
 require('cameramanager')
-require('projectiles')
-require('notifications')
-require('playertables')
 
 print ('[BAREBONES] barebones.lua' )
 
