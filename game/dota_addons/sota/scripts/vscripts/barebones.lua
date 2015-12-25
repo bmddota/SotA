@@ -2,6 +2,8 @@ require('libraries/timers')
 require('libraries/physics')
 require('libraries/projectiles')
 require('libraries/notifications')
+require("libraries/animations")
+require("libraries/attachments")
 require('libraries/playertables')
 require('controloverride')
 require('cameramanager')
@@ -112,6 +114,12 @@ GROUND_FRICTION = .09
 SLOPE_ANGLE = 45
 AIR_DRAG = .02
 FORWARD_OFFSET = 0 --200
+
+MAP_SPEED_MOD = 1.0
+
+if string.find(GetMapName(), "christmas") then
+  MAP_SPEED_MOD = 1.3
+end
 
 
 SMOOTH_ENABLE = "0"
@@ -238,6 +246,33 @@ function GameMode:OnFirstPlayerLoaded()
   CustomNetTables:SetTableValue("sotaui", "radiant_score", {value=0})
   CustomNetTables:SetTableValue("sotaui", "dire_score", {value=0})
   CustomNetTables:SetTableValue("sotaui", "score_max", {value=KILLS_TO_END_GAME_FOR_TEAM})
+
+  local mapOffsets = 
+    {default=
+      {npc_dota_hero_nevermore=200,
+       npc_dota_hero_juggernaut=210,
+       npc_dota_hero_sniper=240,
+       npc_dota_hero_mirana=240,
+       npc_dota_hero_windrunner=210
+      }
+    ,christmas=
+      {npc_dota_hero_nevermore=130,
+       npc_dota_hero_juggernaut=140,
+       npc_dota_hero_sniper=170,
+       npc_dota_hero_mirana=160,
+       npc_dota_hero_windrunner=140
+      }
+    ,christmas_max=
+      {npc_dota_hero_nevermore=130,
+       npc_dota_hero_juggernaut=140,
+       npc_dota_hero_sniper=170,
+       npc_dota_hero_mirana=160,
+       npc_dota_hero_windrunner=140
+      }
+    }
+  local offsets = mapOffsets[GetMapName()] or mapOffsets["default"]
+
+  CustomNetTables:SetTableValue("sotaui", "offsets", offsets);
 
   -- set up playertables
   for i=0,DOTA_MAX_TEAM_PLAYERS-1 do
@@ -490,7 +525,22 @@ end
 function GameMode:OnAllPlayersLoaded()
   print("[BAREBONES] All Players have loaded into the game")
   GameMode:DrawPowerups()
+
+  if string.find(GetMapName(), "christmas") then
+    local pos = Entities:FindByName(nil, "angel_position")
+    local angel = CreateUnitByName("npc_angel", pos:GetAbsOrigin(), false, nil, nil, DOTA_TEAM_NEUTRALS)
+
+    Timers:CreateTimer(function()
+      angel:SetAbsOrigin(pos:GetAbsOrigin())
+    end)
+
+    Timers:CreateTimer(5, function()
+      StartAnimation(angel, {duration=35, activity=ACT_DOTA_CAST_ABILITY_4, rate=0.2})
+      return 35
+    end)
+  end
 end
+
 
 function GameMode:DrawPowerups()
   GameMode.powerupsDrawn = true
@@ -928,6 +978,17 @@ function GameMode:OnHeroInGame(hero)
     end
   end
 
+  local hatAttach = {
+    npc_dota_hero_nevermore="attach_head",
+    npc_dota_hero_furion="attach_eyeR",
+  }
+
+  if string.find(GetMapName(), "christmas") then
+    Timers:CreateTimer(.1, function()
+      hero.christmasHat = Attachments:AttachProp(hero, hatAttach[hero:GetClassname()] or "attach_hitloc", "models/items/furion/hat_holiday_1.vmdl")
+    end)
+  end
+
   Timers:CreateTimer(.5, function()
     local heroList = HeroList:GetAllHeroes()
     for i=1,#heroList do
@@ -1010,11 +1071,12 @@ function GameMode:OnHeroInGame(hero)
         return
       end
       if hero:IsAlive() then
+        local fric = hero.groundFrictionOverride or GROUND_FRICTION
         local pos = hero:GetAbsOrigin()
         local ground = GetGroundPosition(pos, hero)
         if pos.z - ground.z < 2 and Physics:CalcNormal(ground,hero,10).z > hero.fNavGroundAngle then
           hero.jumps = hero.maxJumps
-          hero:SetPhysicsFriction(GROUND_FRICTION)
+          hero:SetPhysicsFriction(fric)
           if hero.inAir then
             hero:OnLand(false)
           end
@@ -1022,13 +1084,13 @@ function GameMode:OnHeroInGame(hero)
           --hero:FollowNavMesh(true)
         elseif GridNav:IsNearbyTree(pos, 30, true) and ground.z + 340 == pos.z and hero:GetPhysicsVelocity().z == 0 then
           hero.jumps = hero.maxJumps
-          hero:SetPhysicsFriction(GROUND_FRICTION)
+          hero:SetPhysicsFriction(fric)
           if hero.inAir then
             hero:OnLand(true)
           end
           hero.inAir = false
         else
-          hero:SetPhysicsFriction(AIR_DRAG)
+          hero:SetPhysicsFriction(hero.airDragOverride or AIR_DRAG)
           if not hero.inAir then
             hero:OnTakeOff()
           end
@@ -1087,7 +1149,7 @@ function GameMode:OnHeroInGame(hero)
           hero:RemoveModifierByName('modifier_tutorial_forceanimation')
         end
 
-        local speedMod = hero.speedModifier or 1
+        local speedMod = MAP_SPEED_MOD * hero.speedModifier or 1
 
         hero:SetStaticVelocity('move', hero.speed * speedMod * dir)
 
@@ -1440,7 +1502,7 @@ function GameMode:InitGameMode()
   GameRules:SetRuneMinimapIconScale( MINIMAP_RUNE_ICON_SIZE )
 
   local name = GetMapName()
-  if name == "caldera" then
+  if not string.find(name,"max") then
     GameRules:SetCustomGameTeamMaxPlayers(DOTA_TEAM_GOODGUYS, 6)
     GameRules:SetCustomGameTeamMaxPlayers(DOTA_TEAM_BADGUYS, 6)
   else

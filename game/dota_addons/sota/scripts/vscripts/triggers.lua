@@ -41,6 +41,47 @@ function SpeedChangeEnd(trigger)
 	--trigger.activator:RemoveModifierByName('sewer_slow')
 end
 
+function IceTouchStart(trigger)
+  local activator = trigger.activator
+  if not activator.IsHero or not activator:IsHero() then
+    return
+  end
+
+  if activator.iceTimer then
+    GameRules.Timers:RemoveTimer(activator.iceTimer)
+  end
+
+  activator.iceTimer = GameRules.Timers:CreateTimer(.2, function()
+    --print('end')
+    activator:Slide(false)
+    activator.groundFrictionOverride = nil
+    activator.airDragOverride = nil
+    local old = activator.iceParticle
+    Timers:CreateTimer(5, function() ParticleManager:DestroyParticle(old, false) end)
+    ParticleManager:SetParticleControl(old, 1, Vector(0,0,0))
+    activator.iceParticle = nil
+  end)
+
+  activator:Slide(true)
+
+  if activator:HasModifier("mana_regen_reduced") then
+    activator:SetSlideMultiplier(.015)
+  else
+    activator:SetSlideMultiplier(.04)
+  end
+  activator.groundFrictionOverride = .01
+  activator.airDragOverride = 0
+
+  if not activator.iceParticle then
+    activator.iceParticle = ParticleManager:CreateParticle("particles/ice_trail.vpcf", PATTACH_ABSORIGIN_FOLLOW, activator)
+    ParticleManager:SetParticleControl(activator.iceParticle, 1, Vector(1,0,0))
+  end
+end
+
+function IceTouchEnd(trigger)
+  --print('ice end')
+end
+
 function LavaTouch(trigger)
 	if not trigger.activator.IsHero or not trigger.activator:IsHero() then
 		if trigger.activator.GetUnitName then

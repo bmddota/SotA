@@ -88,13 +88,29 @@ function WEAPONMODULE:InitializeWeapon(hero)
         bRecreateOnChange = true,
         bZCheck = true,
         --draw = true,             draw = {alpha=1, color=Vector(200,0,0)},
+        --bTreeFullCollision = false,
+        --bGroundLock = false,
+        --bProvidesVision = false,
+        --iVisionRadius = 350,
+        --iVisionTeamNumber = hero:GetTeam(),
+        --bFlyingVision = false,
+        --fVisionTickTime = .1,
+        --fVisionLingerDuration = 1,
         --iPositionCP = 0,
         --iVelocityCP = 1,
         --ControlPoints = {[5]=Vector(100,0,0), [10]=Vector(0,0,1)},
+        --ControlPointForwards = {[4]=hero:GetForwardVector() * -1},
+        --ControlPointOrientations = {[1]={hero:GetForwardVector() * -1, hero:GetForwardVector() * -1, hero:GetForwardVector() * -1}},
+        --[[ControlPointEntityAttaches = {[0]={
+          unit = hero,
+          pattach = PATTACH_ABSORIGIN_FOLLOW,
+          attachPoint = "attach_attack1", -- nil
+          origin = Vector(0,0,0)
+        }},]]
         --fRehitDelay = .3,
-        --bGroundLock = false,
         --fChangeDelay = 1,
         --fRadiusStep = 10,
+        --bUseFindUnitsInRadius = false,
 
         UnitTest = function(self, unit) return unit:GetUnitName() ~= "npc_dummy_unit" and GameRules:IsEnemy(unit:GetTeamNumber(), hero:GetTeamNumber()) and unit.dodgeProjectiles ~= true; end,
         OnUnitHit = function(self, unit) 

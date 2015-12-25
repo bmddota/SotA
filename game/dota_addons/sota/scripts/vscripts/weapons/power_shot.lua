@@ -167,8 +167,8 @@ function WEAPONMODULE:InitializeWeapon(hero)
         end
       end,
       --OnTreeHit = function(self, tree) ... end,
-      OnWallHit = function(self, gnvPos)  print('onwallhit') end,
-      OnGroundHit = function(self, groundPos) print('ongroundhit') end,
+      --OnWallHit = function(self, gnvPos)  print('onwallhit') end,
+      --OnGroundHit = function(self, groundPos) print('ongroundhit') end,
       --OnFinish = function(self, pos) ... end,
     }
 

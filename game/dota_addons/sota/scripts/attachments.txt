@@ -186,9 +186,10 @@
 			"models/items/furion/hat_holiday_1.vmdl"
 			{
 				"scale"		"0.89999997615814"
-				"pitch"		"-111"
+				//"pitch"		"-111"
+				"pitch"		"-92"
 				"roll"		"-6"
-				"ZPos"		"-144"
+				"ZPos"		"-139"
 				"YPos"		"-5"
 				"yaw"		"-19"
 				"XPos"		"9"

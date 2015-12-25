@@ -1,9 +1,6 @@
 require("statcollection/init")
 
 require('util')
-require('timers')
-require('physics')
-require('multiteam')
 require('barebones')
 
 function Precache( context )
@@ -24,6 +21,7 @@ function Precache( context )
 		PrecacheResource("particle", "particles/frostivus_gameplay/frostivus_throne_wraith_king_ambient_beams_f.vpcf", context)
 		PrecacheResource("particle_folder", "particles/bullet", context)
 		PrecacheResource("particle", "particles/orb/shield.vpcf", context)
+		PrecacheResource("particle", "particles/ice_trail.vpcf", context)
 
 		PrecacheResource("particle_folder", "particles/sota_mirana", context)
 		PrecacheResource("particle_folder", "particles/sota_windrunner", context)

@@ -1,5 +1,51 @@
 local hero = PlayerResource:GetPlayer(0):GetAssignedHero()
+
+if particle then
+  ParticleManager:DestroyParticle(particle, false)
+end
+particle = ParticleManager:CreateParticle("particles/ice_trail.vpcf", PATTACH_ABSORIGIN_FOLLOW, hero)
+
+if true then
+  return
+end
+
+
 --hero.shotOffset = Vector(0,0,150)
+require("libraries/animations")
+
+local pos = Entities:FindByName(nil, "angel_position")
+if IsValidEntity(angel) then
+  angel:RemoveSelf()
+end
+angel = CreateUnitByName("npc_angel", pos:GetAbsOrigin(), false, nil, nil, DOTA_TEAM_NEUTRALS)
+
+Timers:CreateTimer(function()
+  angel:SetAbsOrigin(pos:GetAbsOrigin())
+end)
+
+if angelTimer then Timers:RemoveTimer(angelTimer) end
+angelTimer = Timers:CreateTimer(function()
+  StartAnimation(angel, {duration=35, activity=ACT_DOTA_CAST_ABILITY_4, rate=0.2})
+  return 35
+end)
+  
+
+if true then
+  return
+end
+
+debug.sethook(function(...)
+  local info = debug.getinfo(2)
+  local src = tostring(info.short_src)
+  local name = tostring(info.name)
+  if name ~= "__index" then
+    print("Call: " .. tostring(info.short_src) .. " -- " .. tostring(info.name))
+  end
+end, "c")
+
+if true then
+  return
+end
 
 require("libraries/attachments")
 

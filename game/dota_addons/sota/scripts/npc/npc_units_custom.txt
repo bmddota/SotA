@@ -563,6 +563,95 @@
 		"AttackDesire"				"1.5"		// How much bots want to attack them vs other non-hero things
 	}
 
+	"npc_angel"
+  {                                
+    // General
+    //----------------------------------------------------------------
+    "Model"                     "models/heroes/crystal_maiden/crystal_maiden_arcana.vmdl"        // Model.
+    "BaseClass"                 "npc_dota_creature"
+    "SoundSet"                  "0"
+    //"GameSoundsFile"            "soundevents/game_sounds_heroes/game_sounds_sandking.vsndevts"
+    "Level"                     "1"
+    "ModelScale"                    "4.76"
+    ////"IsNeutralUnitType"         "1"
+
+    // Abilities
+    //----------------------------------------------------------------
+    "Ability1"                  "reflex_dummy_unit"          // Ability 1
+    "Ability2"                  ""          // Ability 2
+    "Ability3"                  ""          // Ability 3
+    "Ability4"                  ""          // Ability 4
+
+    // Armor
+    //----------------------------------------------------------------
+    "ArmorPhysical"             "1"         // Physical protection.
+
+    // Attack
+    //----------------------------------------------------------------
+    "AttackCapabilities"        "DOTA_UNIT_CAP_NO_ATTACK"
+    "AttackDamageMin"           "21"        // Damage range min.
+    "AttackDamageMax"           "24"        // Damage range max.    
+    "AttackRate"                "1.700000"
+    "AttackAnimationPoint"      "0.30000"
+    "AttackAcquisitionRange"    "0"       // Range within a target can be acquired.
+    "AttackRange"               "128"        // Range within a target can be attacked.
+    "ProjectileModel"           ""          // Particle system model for projectile.
+    "ProjectileSpeed"           "0"         // Speed of projectile.        
+
+    // Bounds
+    //----------------------------------------------------------------
+    //"BoundsHullName"            "DOTA_HULL_SIZE_SMALL"          // Hull type used for navigation/locomotion.
+    "RingRadius"                "45"
+    "HealthBarOffset"           "140"
+
+    // Bounty
+    //----------------------------------------------------------------
+    "BountyXP"                  "62"        // Experience earn.
+    "BountyGoldMin"             "22"        // Gold earned min.
+    "BountyGoldMax"             "26"        // Gold earned max.
+
+    // Movement
+    //----------------------------------------------------------------
+    "MovementCapabilities"      "DOTA_UNIT_CAP_MOVE_NONE"
+    "MovementSpeed"             "350"       // Speed.
+
+    // Status
+    //----------------------------------------------------------------
+    "StatusHealth"              "500"       // Base health.
+    "StatusHealthRegen"         "0.5"       // Health regeneration rate.
+    "StatusMana"                "0"         // Base mana.
+    "StatusManaRegen"           "0"         // Mana regeneration rate.       
+    
+    // Vision
+    //----------------------------------------------------------------
+    "VisionDaytimeRange"        "800"       // Range of vision during day light.
+    "VisionNighttimeRange"      "800"       // Range of vision at night time.
+
+    // Team
+    //----------------------------------------------------------------
+    "TeamName"                  "DOTA_TEAM_NEUTRALS"                            // Team name.
+    "CombatClassAttack"         "DOTA_COMBAT_CLASS_ATTACK_PIERCE"
+    "CombatClassDefend"         "DOTA_COMBAT_CLASS_DEFEND_STRONG"
+    "UnitRelationshipClass"     "DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
+
+    
+    // Creature Data
+    //----------------------------------------------------------------------------------------------------------------------
+    "Creature"
+    {
+      "AttachWearables" // Default npc_dota_hero_crystal_maiden
+        {
+            "1" { "ItemDef" "39" } // Crystal Maiden's Shoulder Pads
+            "2" { "ItemDef" "6686" } // Yulsaria's thing
+            //"2" { "ItemDef" "311" } // Crystal Maiden's Headdress
+            "3" { "ItemDef" "40" } // Crystal Maiden's Weapon
+            "4" { "ItemDef" "41" } // Crystal Maiden's Cuffs
+            "5" { "ItemDef" "502" } // Crystal Maiden's Ambient Effects
+            "6" { "ItemDef" "38" } // Crystal Maiden's Cape
+        }
+    }
+  }
+
   
   //------------------------------------------------------------------------------------
   //- This unit can be used to precache different models/particles/sounds              -

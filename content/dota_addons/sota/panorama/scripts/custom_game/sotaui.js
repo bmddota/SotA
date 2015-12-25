@@ -22,11 +22,9 @@ GameUI.SetRenderBottomInsetOverride( 0 );
 GameUI.SetRenderTopInsetOverride( 0 ); 
 
 var lookatOff = 0;
-var offset = {"npc_dota_hero_nevermore":200,
-              "npc_dota_hero_juggernaut":210,
-              "npc_dota_hero_sniper":240,
-              "npc_dota_hero_mirana":240,
-              "npc_dota_hero_windrunner":210};
+var offset = CustomNetTables.GetTableValue( "sotaui", "offsets" );
+$.Msg("offset")
+$.Msg(offset);
 
 
 var pitch = 67;

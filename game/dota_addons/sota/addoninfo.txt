@@ -1,8 +1,12 @@
 "AddonInfo"
 {
   "TeamCount" "2"
-  "maps"      "caldera caldera_max"
+  "maps"      "christmas caldera christmas_max caldera_max "
   "IsPlayable"  "1"
+  "christmas"
+  {
+          "MaxPlayers"                    "12"
+  }
   "caldera"
   {
           "MaxPlayers"                    "12"
@@ -11,12 +15,8 @@
   {
           "MaxPlayers"                    "24"
   }
-//  "desert_duo"
-//  {
-//          "MaxPlayers"                    "10"
-//  }
-//  "forest_solo"
-//  {
-//          "MaxPlayers"                    "10"
-//  }
+  "christmas_max"
+  {
+          "MaxPlayers"                    "24"
+  }
 }

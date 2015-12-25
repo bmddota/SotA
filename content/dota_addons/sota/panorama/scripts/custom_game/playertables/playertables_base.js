@@ -1,6 +1,6 @@
 var reload = true;
 
-$.Msg("playertables_base.js");
+$.Msg("playertables_base.js"); 
 
 var PlayerTables = {};
 

@@ -28,6 +28,9 @@ function HERODEFAULT:InitializeClass(hero)
   hero.fixPosition = nil
   hero.dodgeProjectiles = false
 
+  hero.groundFrictionOverride = nil
+  hero.airDragOverride = nil
+
   hero.renderColor = {[DOTA_TEAM_GOODGUYS] = Vector(125,125,255), 
                       [DOTA_TEAM_BADGUYS]  = Vector(255,125,125),
                       [DOTA_TEAM_CUSTOM_1] = Vector(125,125,255), 

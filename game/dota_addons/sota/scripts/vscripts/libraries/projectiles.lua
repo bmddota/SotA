@@ -249,7 +249,6 @@ function Projectiles:CreateProjectile(projectile)
       projectile.changes = projectile.changes - 1
       projectile.vel = newVel / 30
       projectile.changeTime = GameRules:GetGameTime() + projectile.fChangeDelay
-      print('setvel')
       --print ('setting CP' .. projectile.iVelocityCP .. 'to ' .. tostring(newVel))
 
       if projectile.bRecreateOnChange then
